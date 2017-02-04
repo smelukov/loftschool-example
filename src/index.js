@@ -31,9 +31,11 @@ function defaultParameterValue(a, b) {
  */
 function returnArgumentsArray() {
     var result = [];
+
     for (var i = 0; i < arguments.length; i++) {
         result.push(arguments[i]);
     }
+
     return result;
 }
 
@@ -59,9 +61,9 @@ function returnCounter(number) {
 
     function F() {
         number++;
+
         return number;
     }
-
 
     return F;
 }
@@ -72,9 +74,20 @@ function returnCounter(number) {
  Функция должна принимать другую функцию (F) и некоторое количество дополнительных аргументов
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
+
+// function fn(a, b) {
+//     return a + b;
+// }
+
 function bindFunction(fn) {
 
+    var newFn = fn.bind(null, arguments[1], arguments[2]);
+
+    return newFn;
 }
+
+// result = bindFunction(fn, 10, 20);
+// console.log(result());
 
 export {
     returnFirstArgument,
