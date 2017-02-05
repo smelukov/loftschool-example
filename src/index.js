@@ -75,19 +75,19 @@ function returnCounter(number) {
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
 
-// function fn(a, b) {
-//     return a + b;
-// }
-
 function bindFunction(fn) {
+    var array = [];
 
-    var newFn = fn.bind(null, arguments[1], arguments[2]);
+    for (var i = 0; i < (arguments.length - 1); i++) {
+        array.push(arguments[i+1]);
+    }
+
+    var newFn = function() {
+        return fn.apply(null, array);
+    }
 
     return newFn;
 }
-
-// result = bindFunction(fn, 10, 20);
-// console.log(result());
 
 export {
     returnFirstArgument,
