@@ -30,11 +30,7 @@ function defaultParameterValue(a, b) {
  Количество переданных аргументов заранее неизвестно
  */
 function returnArgumentsArray() {
-    var result = [];
-
-    for (var i = 0; i < arguments.length; i++) {
-        result.push(arguments[i]);
-    }
+    var result = [...arguments];
 
     return result;
 }
@@ -76,17 +72,7 @@ function returnCounter(number) {
  */
 
 function bindFunction(fn) {
-    var array = [];
-
-    for (var i = 0; i < (arguments.length - 1); i++) {
-        array.push(arguments[i+1]);
-    }
-
-    var newFn = function() {
-        return fn.apply(null, array);
-    }
-
-    return newFn;
+    return fn.bind(...arguments);
 }
 
 export {
