@@ -10,6 +10,17 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isAllTrue(array, fn) {
+    var result = true;
+    if(typeof(fn) !== "function") {
+        throw new Error("fn is not a function");
+    }
+    if(!Array.isArray(array) || array.length === 0){
+        throw new Error("empty array");
+    }
+    for(var i = 0; i< array.length; i++){
+        result = result && fn(array[i]);
+    }
+    return result;
 }
 
 /*
@@ -22,6 +33,17 @@ function isAllTrue(array, fn) {
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
+    var result = false;
+    if(typeof(fn) !== "function") {
+        throw new Error("fn is not a function");
+    }
+    if(!Array.isArray(array) || array.length === 0){
+        throw new Error("empty array");
+    }
+    for(var i = 0; i< array.length; i++){
+        result = result || fn(array[i]);
+    }
+    return result;
 }
 
 /*
@@ -33,6 +55,19 @@ function isSomeTrue(array, fn) {
  - fn не является функцией (с текстом "fn is not a function")
  */
 function returnBadArguments(fn) {
+    var badArguments  = [];
+    if(typeof(fn) !== "function") {
+        throw new Error("fn is not a function");
+    }
+    for(var i = 1; i < arguments.length; i++){
+        try{
+            fn(arguments[i]);
+        }
+        catch(error){
+            badArguments.push(arguments[i]);
+        }
+    }
+    return badArguments;
 }
 
 /*
@@ -43,7 +78,7 @@ function returnBadArguments(fn) {
 function findError(data1, data2) {
     return (function() {
         for (var i = 0; i < data1.length; i++) {
-            if (data1[i] !== data2[i]) {
+            if (!isNaN(data1) && data1[i] !== data2[i]) {
                 return false;
             }
         }
@@ -67,6 +102,41 @@ function findError(data1, data2) {
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
 function calculator(number) {
+    if(isNaN(number) && number !== undefined) { //Костыль
+        throw new Error("number is not a number");
+    }
+    if(number === undefined){
+        number = 0;
+    }
+    return {
+        sum: function(){
+            for(var i = 0; i < arguments.length; i++) {
+                number += arguments[i];
+            }
+            return number;
+        },
+        dif: function() {
+            for(var i = 0; i < arguments.length; i++) {
+                number -= arguments[i];
+            }
+            return number;
+        },
+        div: function() {
+            for(var i = 0; i < arguments.length; i++) {
+                if(arguments[i] === 0) {
+                    throw new Error("division by 0");
+                }
+                number = number/arguments[i];
+            }
+            return number;
+        },
+        mul: function(){
+            for(var i = 0; i < arguments.length; i++) {
+                number = number * arguments[i];
+            }
+            return number;
+        }
+    };
 }
 
 export {
