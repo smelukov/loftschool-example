@@ -1,206 +1,239 @@
 import assert from 'assert';
-import { isAllTrue, isSomeTrue, returnBadArguments, findError, calculator } from '../src/index';
+import {
+    createDivWithText,
+    createAWithHref,
+    prepend,
+    findAllPSiblings,
+    findError,
+    deleteTextNodes,
+    deleteTextNodesRecursive,
+    collectDOMStat,
+    observeChildNodes
+} from '../src/index';
 
-describe('ДЗ 2 - работа с исключениями и отладчиком', () => {
-    describe('isAllTrue', () => {
-        it('должна вызывать fn для всех элементов массива', () => {
-            let array = [1, 2, 3, 4, 5];
-            let pass = [];
+describe('ДЗ 4 - Работа с DOM', () => {
+    describe('createDivWithText', () => {
+        it('должна возвращать элемент с тегом DIV', () => {
+            let text = 'привет!';
+            let result = createDivWithText(text);
 
-            isAllTrue(array, e => pass.push(e));
-
-            assert.deepEqual(pass, array);
+            assert(result instanceof Element);
+            assert.equal(result.tagName, 'DIV');
         });
 
-        it('должна вернуть true, если fn вернула true для всех элементов массива', () => {
-            let array = [1, 2, 3, 4, 5];
-            let result = isAllTrue(array, Number.isFinite);
+        it('должна добавлять текст в элемент', () => {
+            let text = 'привет!';
+            let result = createDivWithText(text);
 
-            assert(result === true);
-        });
-
-        it('должна выбросить исключение, если передан пустой массив', () => {
-            let array = [];
-
-            try {
-                isAllTrue(array, Number.isFinite);
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'empty array');
-            }
-        });
-
-        it('должна выбросить исключение, если передан не массив', () => {
-            let array = ':(';
-
-            try {
-                isAllTrue(array, Number.isFinite);
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'empty array');
-            }
-        });
-
-        it('должна выбросить исключение, если fn не функция', () => {
-            let array = [1, 2, 3, 4, 5];
-
-            try {
-                isAllTrue(array, ':(');
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'fn is not a function');
-            }
+            assert.equal(result.innerText, text);
         });
     });
 
-    describe('isSomeTrue', () => {
-        it('должна вернуть true, если fn вернула true хотя бы для эдного из элементов массива', () => {
-            let array = ['привет', 'loftschool', 100, '!!!'];
-            let result = isSomeTrue(array, Number.isFinite);
+    describe('createAWithHref', () => {
+        it('должна возвращать элемент с тегом A', () => {
+            let href = 'http://loftschool.com';
+            let result = createAWithHref(href);
 
-            assert(result === true);
+            assert(result instanceof Element);
+            assert.equal(result.tagName, 'A');
         });
 
-        it('должна выбросить исключение, если передан пустой массив', () => {
-            let array = [];
+        it('должна добавлять атрибут href', () => {
+            let href = 'http://loftschool.com';
+            let result = createAWithHref(href);
 
-            try {
-                isSomeTrue(array, Number.isFinite);
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'empty array');
-            }
-        });
-
-        it('должна выбросить исключение, если передан не массив', () => {
-            let array = ':(';
-
-            try {
-                isSomeTrue(array, Number.isFinite);
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'empty array');
-            }
-        });
-
-        it('должна выбросить исключение, если fn не функция', () => {
-            let array = [1, 2, 3, 4, 5];
-
-            try {
-                isSomeTrue(array, ':(');
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'fn is not a function');
-            }
+            assert.equal(result.getAttribute('href'), href);
         });
     });
 
-    describe('returnBadArguments', () => {
-        it('должна вызывать fn для всех аргументов', () => {
-            let args = [1, 2, 3, 4, 5];
-            let pass = [];
+    describe('prepend', () => {
+        it('должна добавлять элемента в начало', () => {
+            let where = document.createElement('div');
+            let what = document.createElement('p');
 
-            returnBadArguments(e => pass.push(e), ...args);
+            where.innerHTML = ', <b>loftschool</b>!';
+            what.innerText = 'привет';
 
-            assert.deepEqual(pass, args);
+            prepend(what, where);
+
+            assert.equal(where.firstChild, what);
+            assert.equal(where.innerHTML, '<p>привет</p>, <b>loftschool</b>!');
         });
+    });
 
-        it('должна вернуть массив с аргументами, для которых fn выбрасила исключение', () => {
-            let badArgs = [1, 3, 5];
-            let fn = a => {
-                if (a % 2 != 0) {
-                    throw new Error('not even');
-                }
-            };
-            let result = returnBadArguments(fn, 1, 2, 3, 4, 5);
+    describe('findAllPSiblings', () => {
+        it('должна возвращать массив с элементами, соседями которых являются P', () => {
+            let where = document.createElement('div');
+            let result;
 
-            assert.deepEqual(result, badArgs);
-        });
+            where.innerHTML = '<div></div><p></p><span></span><span></span><p></p>';
+            result = findAllPSiblings(where);
 
-        it('должна вернуть массив пустой массив, если не передано дополнительных аргументов', () => {
-            let fn = () => ':)';
-            let result = returnBadArguments(fn);
-
-            assert.deepEqual(result, []);
-        });
-
-        it('должна выбросить исключение, если fn не функция', () => {
-            try {
-                returnBadArguments(':(');
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'fn is not a function');
-            }
+            assert(Array.isArray(result));
+            assert.deepEqual(result, [where.children[0], where.children[3]]);
         });
     });
 
     describe('findError', () => {
-        it('должна возвращать true', () => {
-            let data1 = ['привет', 'loftschool', 10, NaN, '20'];
-            let data2 = ['привет', 'loftschool', '10', NaN, 20];
+        it('должна возвращать массив из текстового содержимого элементов', () => {
+            let where = document.createElement('div');
+            let result;
 
-            assert(findError(data1, data2) === true);
+            where.innerHTML = ' <div>привет</div>, <div>loftschool</div>!!!';
+            result = findError(where);
+
+            assert(Array.isArray(result));
+            assert.deepEqual(result, ['привет', 'loftschool']);
         });
     });
 
-    describe('calculator', () => {
-        it('должна возвращать объект с методами', () => {
-            let calc = calculator();
+    describe('deleteTextNodes', () => {
+        it('должна удалить все текстовые узлы', () => {
+            let where = document.createElement('div');
 
-            assert('sum' in calc, true, 'нет метода sum');
-            assert('dif' in calc, true, 'нет метода dif');
-            assert('div' in calc, true, 'нет метода div');
-            assert('mul' in calc, true, 'нет метода mul');
+            where.innerHTML = ' <div></div>привет<p></p>loftchool!!!';
+            deleteTextNodes(where);
+
+            assert.equal(where.innerHTML, '<div></div><p></p>');
+        });
+    });
+
+    describe('deleteTextNodesRecursive', () => {
+        it('должна рекурсивно удалить все текстовые узлы', () => {
+            let where = document.createElement('div');
+
+            where.innerHTML = '<span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>';
+            deleteTextNodesRecursive(where);
+
+            assert.equal(where.innerHTML, '<span><div><b></b></div><p></p></span>');
+        });
+    });
+
+    describe('collectDOMStat', () => {
+        it('должна вернуть статистику по переданному дереву', () => {
+            let where = document.createElement('div');
+            let stat = {
+                tags: { DIV: 1, B: 2 },
+                classes: { 'class-1': 2, 'class-2': 1 },
+                texts: 3
+            };
+            let result;
+
+            where.innerHTML = '<div class="class-1"><b>привет!</b> <b class="class-1 class-2">loftschool</b></div>';
+            result = collectDOMStat(where);
+            assert.deepEqual(result, stat);
+        });
+    });
+
+    describe('observeChildNodes', () => {
+        it('должна вызывать fn при добавлении элементов в указанный элемент', done => {
+            let where = document.createElement('div');
+            let fn = info => {
+                assert(typeof info == 'object' && info, 'info должен быть объектом');
+                assert.equal(info.type, targetInfo.type, `info.type должен быть равен ${targetInfo.type}`);
+                assert(Array.isArray(info.nodes), 'info.nodes должен быть массивом');
+                assert.equal(info.nodes.length, targetInfo.nodes.length, 'некорректный размер info.nodes');
+                targetInfo.nodes.forEach(n => assert(info.nodes.indexOf(n) > -1, 'некорректный элемент в info.nodes'));
+                done();
+            };
+            let elementToInsert = document.createElement('div');
+            let targetInfo = {
+                type: 'insert',
+                nodes: [elementToInsert]
+            };
+
+            document.body.appendChild(where);
+
+            observeChildNodes(where, fn);
+            where.appendChild(elementToInsert);
+
+            document.body.removeChild(where);
         });
 
-        it('метод sum должен складывать аргументы', () => {
-            let calc = calculator(100);
+        it('должна вызывать fn при добавлении множества элементов в указанный элемент', done => {
+            let where = document.createElement('div');
+            let fn = info => {
+                assert(typeof info == 'object' && info, 'info должен быть объектом');
+                assert.equal(info.type, targetInfo.type, `info.type должен быть равен ${targetInfo.type}`);
+                assert(Array.isArray(info.nodes), 'info.nodes должен быть массивом');
+                assert.equal(info.nodes.length, targetInfo.nodes.length, 'некорректный размер info.nodes');
+                targetInfo.nodes.forEach(n => assert(info.nodes.indexOf(n) > -1, 'некорректный элемент в info.nodes'));
+                done();
+            };
+            let elementToInsert1 = document.createElement('div');
+            let elementToInsert2 = document.createElement('div');
+            let elementToInsert3 = document.createElement('div');
+            let targetInfo = {
+                type: 'insert',
+                nodes: [elementToInsert1, elementToInsert2, elementToInsert3]
+            };
+            let fragment = new DocumentFragment();
 
-            assert(calc.sum(1, 2, 3), 106);
+            document.body.appendChild(where);
+
+            fragment.appendChild(elementToInsert1);
+            fragment.appendChild(elementToInsert2);
+            fragment.appendChild(elementToInsert3);
+
+            observeChildNodes(where, fn);
+            where.appendChild(fragment);
+
+            document.body.removeChild(where);
         });
 
-        it('метод dif должен вычитать аргументы', () => {
-            let calc = calculator(100);
+        it('должна вызывать fn при удалении элементов из указанного элемента', done => {
+            let where = document.createElement('div');
+            let fn = info => {
+                assert(typeof info == 'object' && info, 'info должен быть объектом');
+                assert.equal(info.type, targetInfo.type, `info.type должен быть равен ${targetInfo.type}`);
+                assert(Array.isArray(info.nodes), 'info.nodes должен быть массивом');
+                assert.equal(info.nodes.length, targetInfo.nodes.length, 'некорректный размер info.nodes');
+                targetInfo.nodes.forEach(n => assert(info.nodes.indexOf(n) > -1, 'некорректный элемент в info.nodes'));
+                done();
+            };
+            let elementToRemove = document.createElement('div');
+            let targetInfo = {
+                type: 'remove',
+                nodes: [elementToRemove]
+            };
 
-            assert(calc.dif(10, 20), 70);
+            document.body.appendChild(where);
+
+            where.appendChild(elementToRemove);
+            observeChildNodes(where, fn);
+            where.removeChild(elementToRemove);
+
+            document.body.removeChild(where);
         });
 
-        it('метод div должен делить аргументы', () => {
-            let calc = calculator(100);
+        it('должна вызывать fn при удалении множества элементов из указанного элемента', done => {
+            let where = document.createElement('div');
+            let fn = info => {
+                assert(typeof info == 'object' && info, 'info должен быть объектом');
+                assert.equal(info.type, targetInfo.type, `info.type должен быть равен ${targetInfo.type}`);
+                assert(Array.isArray(info.nodes), 'info.nodes должен быть массивом');
+                assert.equal(info.nodes.length, targetInfo.nodes.length, 'некорректный размер info.nodes');
+                targetInfo.nodes.forEach(n => assert(info.nodes.indexOf(n) > -1, 'некорректный элемент в info.nodes'));
+                done();
+            };
+            let elementToRemove1 = document.createElement('div');
+            let elementToRemove2 = document.createElement('div');
+            let elementToRemove3 = document.createElement('div');
+            let targetInfo = {
+                type: 'remove',
+                nodes: [elementToRemove1, elementToRemove2, elementToRemove3]
+            };
 
-            assert(calc.div(2, 2), 25);
-        });
+            document.body.appendChild(where);
 
-        it('метод div должен выбрасывать исключение, если хотя бы один из аргументов равен 0', () => {
-            let calc = calculator(100);
+            where.appendChild(elementToRemove1);
+            where.appendChild(elementToRemove2);
+            where.appendChild(elementToRemove3);
 
-            try {
-                assert(calc.div(2, 0, 2), 25);
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'division by 0');
-            }
-        });
+            observeChildNodes(where, fn);
+            where.innerHTML = '';
 
-        it('метод mul должен умножать аргументы', () => {
-            let calc = calculator(100);
-
-            assert(calc.mul(2, 2), 400);
-        });
-
-        it('функция должна выбрасывать исключение, если number не является числом', () => {
-            try {
-                calculator(':(');
-                assert(false);
-            } catch (e) {
-                assert(e.message == 'number is not a number');
-            }
-        });
-
-        it('значение по умолчанию для аргумента number должно быть равно 0', () => {
-            let calc = calculator();
-
-            assert(calc.sum(1, 2, 3), 6);
+            document.body.removeChild(where);
         });
     });
 });
