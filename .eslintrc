@@ -9,7 +9,8 @@
     "mocha": true
   },
   "globals": {
-    "Proxy": true
+    "Proxy": true,
+    "Promise": true
   },
   "extends": [
     "eslint:recommended"
