@@ -8,6 +8,7 @@
  * @param {function} fn - обработчик
  */
 function addListener(eventName, target, fn) {
+    target.addEventListener(eventName, fn)
 }
 
 /**
@@ -18,6 +19,7 @@ function addListener(eventName, target, fn) {
  * @param {function} fn - обработчик
  */
 function removeListener(eventName, target, fn) {
+    target.removeEventListener(eventName, fn)
 }
 
 /**
@@ -36,6 +38,8 @@ function skipDefault(eventName, target) {
  * @param {Element} target - элемент, на который нужно добавить обработчик
  */
 function emulateClick(target) {
+    var event = new CustomEvent('click')
+    target.dispatchEvent(event)
 }
 
 /**
@@ -46,25 +50,22 @@ function emulateClick(target) {
  * @param {function} fn - функция, которую нужно вызвать при клике на элемент BUTTON внутри target
  */
 function delegate(target, fn) {
+
+    target.addEventListener('click', (e) => {
+        if (e.target.tagName == 'BUTTON'){
+            fn();
+        }
+    })
+
 }
 
-/**
- * *** Со звездочкой ***
- * Функция должна добавить такой обработчик кликов к элементу target
- * который сработает только один раз и удалится
- * Постарайтесь не создавать глобальных переменных
- *
- * @param {Element} target - элемент, на который нужно добавить обработчик
- * @param {function} fn - обработчик
- */
-function once(target, fn) {
-}
+
 
 export {
     addListener,
     removeListener,
     skipDefault,
     emulateClick,
-    delegate,
-    once
+    delegate
+
 };
