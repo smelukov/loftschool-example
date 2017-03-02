@@ -96,7 +96,7 @@ function findError(where) {
 function deleteTextNodes(where) {
     var nodes = where.childNodes;
     for (var child of nodes){
-        if (child.nodeType == 'TEXT_NODE'){
+        if (child.nodeType == 3){
             where.removeChild(child);
         }
     }
@@ -113,66 +113,20 @@ function deleteTextNodes(where) {
  * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    var nodes = where.childNodes;
+    for (var child of nodes){
+        if(child.nodeType == 1) {
+            deleteTextNodesRecursive(child);
+        }
+
+        if(child.nodeType == 3) {
+            where.removeChild(child);
+        }
+
+    }
 }
 
-/**
- * *** Со звездочкой ***
- * Необходимо собрать статистику по всем узлам внутри элемента root и вернуть ее в виде объекта
- * Статистика должна содержать:
- * - количество текстовых узлов
- * - количество элементов каждого класса
- * - количество элементов каждого тега
- * Для работы с классами рекомендуется использовать свойство classList
- * Постарайтесь не создавать глобальных переменных
- *
- * @param {Element} root - где собирать статистику
- * @return {{tags: Object<string, number>, classes: Object<string, number>, texts: number}}
- *
- * @example
- * для html <div class="some-class-1"><b>привет!</b> <b class="some-class-1 some-class-2">loftschool</b></div>
- * должен быть возвращен такой объект:
- * {
- *   tags: { DIV: 1, B: 2},
- *   classes: { "some-class-1": 2, "some-class-2": 1 },
- *   texts: 3
- * }
- */
-function collectDOMStat(root) {
-}
 
-/**
- * *** Со звездочкой ***
- * Функция должна отслеживать добавление и удаление элементов внутри элемента where
- * Как только в where добавляются или удаляются элемента,
- * необходимо сообщать об этом при помощи вызова функции fn со специальным аргументом
- * В качестве аргумента должен быть передан объек с двумя свойствами:
- * - type: типа события (insert или remove)
- * - nodes: массив из удаленных или добавленных элементов (а зависимости от события)
- * Отслеживание должно работать вне зависимости от глубины создаваемых/удаляемых элементов
- * Рекомендуется использовать MutationObserver
- *
- * @param {Element} where - где отслеживать
- * @param {function(info: {type: string, nodes: Array<Element>})} fn - функция, которую необходимо вызвать
- *
- * @example
- * если в where или в одного из его детей добавляется элемент div
- * то fn должна быть вызвана с аргументов:
- * {
- *   type: 'insert',
- *   nodes: [div]
- * }
- *
- * ------
- *
- * если из where или из одного из его детей удаляется элемент div
- * то fn должна быть вызвана с аргументов:
- * {
- *   type: 'remove',
- *   nodes: [div]
- * }
- */
-function observeChildNodes(where, fn) {
-}
 
 export {
     createDivWithText,
@@ -181,7 +135,6 @@ export {
     findAllPSiblings,
     findError,
     deleteTextNodes,
-    deleteTextNodesRecursive,
-    collectDOMStat,
-    observeChildNodes
+    deleteTextNodesRecursive
+
 };
