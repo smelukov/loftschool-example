@@ -59,13 +59,30 @@ function delegate(target, fn) {
 
 }
 
+/**
+ * *** Со звездочкой ***
+ * Функция должна добавить такой обработчик кликов к элементу target
+ * который сработает только один раз и удалится
+ * Постарайтесь не создавать глобальных переменных
+ *
+ * @param {Element} target - элемент, на который нужно добавить обработчик
+ * @param {function} fn - обработчик
+ */
+function once(target, fn) {
+    function handler(e){
+        fn();
+        target.removeEventListener('click', handler);
+    }
 
+    target.addEventListener('click', handler);
+}
 
 export {
     addListener,
     removeListener,
     skipDefault,
     emulateClick,
-    delegate
+    delegate,
+    once
 
 };

@@ -91,4 +91,22 @@ describe('ДЗ 5.1 - DOM Events', () => {
         });
     });
 
+    describe('once', () => {
+        it('должна добавлять обработчик кликов, который сработает только один раз и удалится', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
+            let passed = 0;
+            let fn = () => passed++;
+
+            once(target, fn);
+
+            assert.equal(passed, 0);
+            target.dispatchEvent(new CustomEvent(eventName));
+            assert.equal(passed, 1);
+            target.dispatchEvent(new CustomEvent(eventName));
+            assert.equal(passed, 1);
+            target.dispatchEvent(new CustomEvent(eventName));
+        });
+    });
+
  });
