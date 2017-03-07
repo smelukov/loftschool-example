@@ -1,15 +1,13 @@
 {
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 8
+    "ecmaVersion": 7
   },
   "env": {
     "node": true,
     "browser": true,
-    "mocha": true
-  },
-  "globals": {
-    "Proxy": true
+    "mocha": true,
+    "es6": true
   },
   "extends": [
     "eslint:recommended"
