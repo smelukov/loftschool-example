@@ -27,9 +27,10 @@ let homeworkContainer = document.querySelector('#homework-container');
 function createDiv() {
  var newdiv = document.createElement('div');
   newdiv.setAttribute('class', 'draggable-div' );
+  newdiv.setAttribute('draggable', true);
   newdiv.style.height = '200px';
   newdiv.style.width = '200px';
-  newdiv.style.background = '#000';
+  newdiv.style.background = 'red';
   newdiv.style.top = '200px';
   newdiv.style.left = '200px';
   return newdiv;
@@ -41,10 +42,16 @@ function createDiv() {
  * @param {Element} target
  */
 function addListeners(target) {
-  var  handleDragStart = function () {
 
-  };
-target.addEventListener('dragstart', handleDragStart)
+    function drag_start(event){
+        var style = window.getComputedStyle(event.target, null);
+    }
+
+
+
+target.addEventListener('dragstart', drag_start);
+homeworkContainer.addEventListener('dragover', drag_over);
+homeworkContainer.addEventListener('drop', drop);
 
 }
 
