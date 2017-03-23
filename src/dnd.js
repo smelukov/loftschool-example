@@ -31,8 +31,10 @@ function createDiv() {
   newdiv.style.height = '200px';
   newdiv.style.width = '200px';
   newdiv.style.background = 'red';
+  newdiv.style.position = 'absolute';
   newdiv.style.top = '200px';
   newdiv.style.left = '200px';
+  newdiv.id = Math.ceil(Math.random() *100);
   return newdiv;
 }
 
@@ -44,15 +46,43 @@ function createDiv() {
 function addListeners(target) {
 
     function drag_start(event){
-        var style = window.getComputedStyle(event.target, null);
+       var style = window.getComputedStyle(event.target, null);
+        event.dataTransfer.setData("text/plain",
+            (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ','
+            + (parseInt(style.getPropertyValue("top"),10) - event.clientY)
+            + ',' + event.target.id);
+        -144,-67,76
+
+        return true;
     }
 
+
+    function drag_enter(event){
+        event.preventDefault();
+        return true;
+
+    }
+
+    function drag_over(event){
+        event.preventDefault();
+
+    }
+
+    function drag_drop(event){
+        var offset = event.dataTransfer.getData("text/plain").split(',');
+        var dm = document.getElementById(offset[2]);
+        dm.style.left = (event.clientX + parseInt(offset[0], 10)) + 'px';
+        dm.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
+        event.preventDefault();
+        return false;
+
+    }
 
 
 target.addEventListener('dragstart', drag_start);
 homeworkContainer.addEventListener('dragover', drag_over);
-homeworkContainer.addEventListener('drop', drop);
-
+homeworkContainer.addEventListener('dragenter', drag_enter);
+homeworkContainer.addEventListener('drop', drag_drop);
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -65,6 +95,8 @@ addDivButton.addEventListener('click', function() {
     homeworkContainer.appendChild(div);
     // назначить обработчики событий мыши для реализации d&d
     addListeners(div);
+    homeworkContainer.style.height = '500px';
+    homeworkContainer.style.width = '700px';
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
 });
