@@ -1,9 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>{{htmlWebpackPlugin.options.title}}</title>
+    <meta charset="UTF-8">
+    <title>{{htmlWebpackPlugin.options.title}}</title>
+    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?122"></script>
 </head>
+
 <body>
+    <div class="app">
+        <div class="title">
+            <span>
+                Найди и сохрани своих друзей
+            </span>
+            <span id="status" class="status"></span>
+        </div>
+        <div class="filters">
+            <div class="filter">
+                <input type="text" id="filterAllFriends" name="filter-left">
+            </div>
+            <div class="filter">
+                <input type="text" id="filterSelectedFriends" name="filter-rigth">
+            </div>
+        </div>
+        <div class="contact-lists" id="contact-lists">
+            <div class="contact-list" id="contact-list" ondrop="drop(event)" ondragstart="drag(event)" ondragover="allowDrop(event)">
+
+            </div>
+            <div class="contact-list" id="contact-list-selected" ondrop="drop(event)" ondragstart="drag(event)" ondragover="allowDrop(event)">
+
+            </div>
+        </div>
+        <div class="footer">
+            <div class="controls">
+                <button name="save" class="_button" id="save">Сохранить</button>
+                <button class="_button" id="login">Log in</button>
+                <button class="_button" id="logout">Log out</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
