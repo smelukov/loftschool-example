@@ -1,113 +1,95 @@
 import assert from 'assert';
 import {
-    createDivWithText,
-    createAWithHref,
-    prepend,
-    findAllPSiblings,
-    findError,
-    deleteTextNodes,
-    deleteTextNodesRecursive,
-    collectDOMStat,
-    observeChildNodes
+    addListener,
+    removeListener,
+    skipDefault,
+    emulateClick,
+    delegate,
+    once
 } from '../src/index';
 
-describe('ДЗ 4 - Работа с DOM', () => {
-    describe('createDivWithText', () => {
-        it('должна возвращать элемент с тегом DIV', () => {
-            let text = 'привет!';
-            let result = createDivWithText(text);
+describe('ДЗ 5.1 - DOM Events', () => {
+    describe('addListener', () => {
+        it('должна добавлять обработчик событий элемента', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
+            let passed = false;
+            let fn = () => passed = true;
 
-            assert(result instanceof Element);
-            assert.equal(result.tagName, 'DIV');
-        });
+            addListener(eventName, target, fn);
 
-        it('должна добавлять текст в элемент', () => {
-            let text = 'привет!';
-            let result = createDivWithText(text);
-
-            assert.equal(result.innerText, text);
+            assert(!passed);
+            target.dispatchEvent(new CustomEvent(eventName));
+            assert(passed);
         });
     });
 
-    describe('createAWithHref', () => {
-        it('должна возвращать элемент с тегом A', () => {
-            let href = 'http://loftschool.com';
-            let result = createAWithHref(href);
+    describe('removeListener', () => {
+        it('должна удалять обработчик событий элемента', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
+            let passed = false;
+            let fn = () => passed = true;
 
-            assert(result instanceof Element);
-            assert.equal(result.tagName, 'A');
-        });
+            target.addEventListener(eventName, fn);
 
-        it('должна добавлять атрибут href', () => {
-            let href = 'http://loftschool.com';
-            let result = createAWithHref(href);
+            removeListener(eventName, target, fn);
 
-            assert.equal(result.getAttribute('href'), href);
-        });
-    });
-
-    describe('prepend', () => {
-        it('должна добавлять элемента в начало', () => {
-            let where = document.createElement('div');
-            let what = document.createElement('p');
-
-            where.innerHTML = ', <b>loftschool</b>!';
-            what.innerText = 'привет';
-
-            prepend(what, where);
-
-            assert.equal(where.firstChild, what);
-            assert.equal(where.innerHTML, '<p>привет</p>, <b>loftschool</b>!');
+            target.dispatchEvent(new CustomEvent(eventName));
+            assert(!passed);
         });
     });
 
-    describe('findAllPSiblings', () => {
-        it('должна возвращать массив с элементами, соседями которых являются P', () => {
-            let where = document.createElement('div');
+    describe('skipDefault', () => {
+        it('должна добавлять такой обработчик, который предотвращает действие по умолчанию', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
             let result;
 
-            where.innerHTML = '<div></div><p></p><span></span><span></span><p></p>';
-            result = findAllPSiblings(where);
+            skipDefault(eventName, target);
 
-            assert(Array.isArray(result));
-            assert.deepEqual(result, [where.children[0], where.children[3]]);
+            result = target.dispatchEvent(new CustomEvent(eventName, { cancelable: true }));
+            assert(!result);
         });
     });
 
-    describe('findError', () => {
-        it('должна возвращать массив из текстового содержимого элементов', () => {
-            let where = document.createElement('div');
-            let result;
+    describe('emulateClick', () => {
+        it('должна эмулировать клик по элементу', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
+            let passed = false;
+            let fn = () => passed = true;
 
-            where.innerHTML = ' <div>привет</div>, <div>loftschool</div>!!!';
-            result = findError(where);
+            target.addEventListener(eventName, fn);
 
-            assert(Array.isArray(result));
-            assert.deepEqual(result, ['привет', 'loftschool']);
+            emulateClick(target);
+
+            assert(passed);
         });
     });
 
-    describe('deleteTextNodes', () => {
-        it('должна удалить все текстовые узлы', () => {
-            let where = document.createElement('div');
+    describe('delegate', () => {
+        it('должна добавлять обработчик кликов, который реагирует только на клики по кнопкам', () => {
+            let target = document.createElement('div');
+            let eventName = 'click';
+            let passed = false;
+            let fn = () => passed = true;
 
-            where.innerHTML = ' <div></div>привет<p></p>loftchool!!!';
-            deleteTextNodes(where);
+            target.innerHTML = '<div></div><a href="#"></a><p></p><button></button>';
 
-            assert.equal(where.innerHTML, '<div></div><p></p>');
+            delegate(target, fn);
+
+            assert(!passed);
+            target.children[0].dispatchEvent(new CustomEvent(eventName, { bubbles: true }));
+            assert(!passed);
+            target.children[1].dispatchEvent(new CustomEvent(eventName, { bubbles: true }));
+            assert(!passed);
+            target.children[2].dispatchEvent(new CustomEvent(eventName, { bubbles: true }));
+            assert(!passed);
+            target.children[3].dispatchEvent(new CustomEvent(eventName, { bubbles: true }));
+            assert(passed);
         });
     });
-
-    describe('deleteTextNodesRecursive', () => {
-        it('должна рекурсивно удалить все текстовые узлы', () => {
-            let where = document.createElement('div');
-
-            where.innerHTML = '<span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>';
-            deleteTextNodesRecursive(where);
-
-            assert.equal(where.innerHTML, '<span><div><b></b></div><p></p></span>');
-        });
-    });
-
 
 });
+
