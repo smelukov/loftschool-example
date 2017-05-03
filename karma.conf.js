@@ -12,7 +12,11 @@ module.exports = function(config) {
         webpackMiddleware: {
             stats: 'errors-only'
         },
-        reporters: ['mocha'],
+        reporters: ['mocha', 'coverage-istanbul'],
+        coverageIstanbulReporter: {
+            reports: ['html', 'lcovonly', 'text-summary'],
+            fixWebpackSourcePaths: true
+        },
         port: 9876,
         browsers: ['Firefox'],
         captureTimeout: 60000,
@@ -22,6 +26,7 @@ module.exports = function(config) {
             require('karma-webpack'),
             require('karma-mocha-reporter'),
             require('karma-firefox-launcher'),
+            require('karma-coverage-istanbul-reporter'),
             require('karma-sourcemap-loader')
         ]
     });

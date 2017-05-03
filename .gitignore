@@ -1,8 +1,9 @@
-.idea
-.vscode
+.idea/
+.vscode/
 .DS_Store
 *.lock
 *.log
-out
-dist
-node_modules
+out/
+dist/
+node_modules/
+coverage/
