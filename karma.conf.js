@@ -1,7 +1,7 @@
 module.exports = function(config) {
     config.set({
         basePath: '',
-        frameworks: ['mocha'],
+        frameworks: ['mocha', 'chai'],
         files: [
             'test/**/*.js'
         ],
@@ -18,11 +18,12 @@ module.exports = function(config) {
             fixWebpackSourcePaths: true
         },
         port: 9876,
-        browsers: ['Firefox', 'Chrome'],
+        browsers: ['Firefox'], // или Chrome
         captureTimeout: 20000,
         singleRun: true,
         plugins: [
             require('karma-mocha'),
+            require('karma-chai'),
             require('karma-webpack'),
             require('karma-mocha-reporter'),
             require('karma-firefox-launcher'),
