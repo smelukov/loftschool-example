@@ -8,8 +8,6 @@
 function returnFirstArgument(arg) {
 	return arg;
 }
-var x =  returnFirstArgument(1);
-
 /*
  Задание 2:
 
@@ -19,7 +17,7 @@ var x =  returnFirstArgument(1);
 function defaultParameterValue(a, b=100) {
 	return a + b;
 }
-var y = defaultParameterValue(10);
+
 /*
  Задание 3:
 
@@ -33,7 +31,6 @@ function returnArgumentsArray() {
 	}
 	return result;
 }
-var z = returnArgumentsArray();
 /*
  Задание 4:
 
@@ -43,8 +40,6 @@ function returnFnResult(fn) {
 	return fn();
 }
 
-var q = returnFnResult(function(){return 1+1;});
-
 /*
  Задание 5:
 
@@ -52,9 +47,12 @@ var q = returnFnResult(function(){return 1+1;});
  При вызове F, переданное число должно быть увеличено на единицу и возвращено из F
  */
 function returnCounter(number=0) {
-	return number;
+
+	if ( number < 10) {
+		return returnCounter(++number);
+	}
 }
-var fun = returnCounter(1);
+
 /*
  Задание 6 *:
 
@@ -66,8 +64,6 @@ return	function f (a,s){
 	return a + s;
 	}
 }
-var func = bindFunction(function f(){return a+s;});
-var func1 = func(function(){});
 
 export {
     returnFirstArgument,
