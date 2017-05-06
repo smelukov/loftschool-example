@@ -6,6 +6,7 @@
  Функция должна принимать один аргумент и возвращать его
  */
 function returnFirstArgument(arg) {
+    return arg;
 }
 
 /*
