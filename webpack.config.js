@@ -3,7 +3,7 @@ let HtmlPlugin = require('html-webpack-plugin');
 let CleanWebpackPlugin = require('clean-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let loaders = require('./webpack.config.loaders')();
-const path = require('path');
+let path = require('path');
 
 loaders.push({
     test: /\.css$/,
@@ -17,7 +17,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: '[hash].js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve('dist')
     },
     devtool: 'source-map',
     module: {
