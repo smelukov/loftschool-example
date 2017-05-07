@@ -49,7 +49,13 @@ function returnFnResult(fn) {
  Функция должна принимать число (значение по умолчанию - 0) и возвращать функцию (F)
  При вызове F, переданное число должно быть увеличено на единицу и возвращено из F
  */
-function returnCounter(number) {
+function returnCounter(num) {
+    num = num || 0;
+    function fn() {
+       return ++num;
+    }
+    return fn;
+
 }
 
 /*
