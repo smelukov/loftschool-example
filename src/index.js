@@ -26,7 +26,7 @@ function defaultParameterValue(a, b = 100) {
  Количество переданных аргументов заранее неизвестно
  */
 function returnArgumentsArray() {
-    return [].slice.call(arguments);
+    return Array.prototype.slice.call(arguments);
 }
 
 /*
@@ -63,11 +63,7 @@ function returnCounter(number = 0) {
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
 function bindFunction(fn) {
-    let args = [].slice.call(arguments);
-
-    args.shift();
-
-    return fn.bind.apply(fn, [null].concat(args));
+    return fn.bind(...Array.prototype.slice.call(arguments));
 }
 
 export {
