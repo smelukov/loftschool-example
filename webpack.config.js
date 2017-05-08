@@ -14,7 +14,7 @@ loaders.push({
 });
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './hw1/src/index.js',
     output: {
         filename: '[hash].js',
         path: path.resolve('dist')
