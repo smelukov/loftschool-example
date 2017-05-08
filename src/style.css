@@ -1,0 +1,138 @@
+body {
+    font-family: sans-serif;
+}
+
+button {
+    background-color: rgb(159, 85, 123);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    margin: 7px 2px;
+    cursor: pointer;
+}
+
+.app {
+    height: 600px;
+    width: 700px;
+    border-radius: 5px;
+    border-left: 1px solid lightgrey;
+    border-right: 1px solid lightgrey;
+    overflow: hidden;
+}
+
+.status {
+    height: 100%;
+    width: 40px;
+    background-color: grey;
+    float: right;
+}
+
+.title {
+    color: white;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 40px;
+    background-color: rgb(243, 147, 120);
+    width: 100%;
+    height: 45px;
+}
+
+.title span {
+    margin-left: 15px;
+    font-size: 17px;
+}
+
+.filters {
+    background-color: lightgrey;
+    width: 100%;
+    height: 40px;
+}
+
+.filter {
+    float: left;
+    width: 350px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.contact-lists{
+    height: auto;
+    height: 475px;
+    overflow: hidden;
+}
+
+.contact-list {
+    float: left;
+    width: 350px;
+    height: 475px;
+    overflow: auto;
+}
+
+input:focus {
+    outline: none;
+}
+
+input {
+    width: 85%;
+    height: 29px;
+    padding-left: 22px;
+    border-radius: 5px;
+    border: none;
+    background-image: url(http://i47.tinypic.com/r02vbq.png);
+    background-repeat: no-repeat;
+    background-position: -20px;
+    font-size: 15px;
+}
+
+.mover {
+    top:21px;
+    margin-right: 15px;
+    position:absolute;
+    right:0;
+    height: 20px;
+}
+
+.friend {
+    border-bottom: 1px solid lightgrey;
+    line-height: 55px;
+    position: relative;
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.friendPic {
+    position: relative;
+    float: left;
+    height: 50px;
+    width: 50px;
+    background-color: red;
+    border-radius: 5px;
+}
+
+.friendName {
+    margin-left: 10px;
+    display: inline;
+}
+
+._button {
+    position: relative;
+}
+
+.controls {
+    float: right;
+    margin-right: 15px;
+}
+
+.footer {
+    position: relative;
+    width: 100%;
+    background-color: lightgrey;
+    height: 45px;
+}
