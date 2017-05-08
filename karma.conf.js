@@ -18,9 +18,9 @@ module.exports = function(config) {
             fixWebpackSourcePaths: true
         },
         port: 9876,
-        browsers: ['Firefox'], // или Chrome
+        browsers: ['Chrome'], // или Chrome
         captureTimeout: 20000,
-        singleRun: true,
+        singleRun: false,
         plugins: [
             require('karma-mocha'),
             require('karma-chai'),
