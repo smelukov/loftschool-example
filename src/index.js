@@ -65,9 +65,6 @@ function returnCounter(number) {
  */
 function bindFunction(fn) {
 
-    function F(){
-
-    }
 }
 
 export {
