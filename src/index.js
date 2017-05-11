@@ -53,7 +53,9 @@ function reduce(array, fn, initial) {
  Функция должна удалить указанное свойство из указанного объекта
  */
 function deleteProperty(obj, prop) {
-
+    if (prop in obj) {
+        delete obj[prop];
+    }
 }
 
 /*
@@ -62,6 +64,7 @@ function deleteProperty(obj, prop) {
  Функция должна проверить существует ли укзаанное свойство в указанном объекте
  */
 function hasProperty(obj, prop) {
+    return obj.hasOwnProperty(prop);
 }
 
 /*
@@ -69,13 +72,27 @@ function hasProperty(obj, prop) {
  Функция должна получить все перечисляемые свойства объекта и вернуть их в виде массива
  */
 function getEnumProps(obj) {
+    let result = [];
+
+    for (let key in obj) {
+        result.push(key);
+    }
+
+    return result;
 }
 
 /*
  Задача 7:
- Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
+ Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистр и вернуть в виде массива
  */
 function upperProps(obj) {
+    let result = [];
+
+    for (let key in obj) {
+        result.push(key.toUpperCase());
+    }
+
+    return result;
 }
 
 /*
