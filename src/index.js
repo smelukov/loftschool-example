@@ -5,6 +5,9 @@
  Напишите аналог встроенного метода forEach для работы с массивами
  */
 function forEach(array, fn) {
+    for (let i = 0; i < array.length; i++) {
+        fn(array[i], i, array);
+    }
 }
 
 /*
@@ -12,6 +15,13 @@ function forEach(array, fn) {
  Напишите аналог встроенного метода map для работы с массивами
  */
 function map(array, fn) {
+    let resultArray = [];
+
+    for (let i = 0; i < array.length; i++) {
+        resultArray.push(fn(array[i], i, array));
+    }
+
+    return resultArray;
 }
 
 /*
@@ -19,6 +29,22 @@ function map(array, fn) {
  Напишите аналог встроенного метода reduce для работы с массивами
  */
 function reduce(array, fn, initial) {
+    let i;
+    let result;
+
+    if (initial !== undefined) {
+        result = initial;
+        i = 0;
+    } else {
+        result = array[0];
+        i = 1;
+    }
+
+    for (; i < array.length; i++) {
+        result = fn(result, array[i], i, array);
+    }
+
+    return result;
 }
 
 /*
@@ -27,6 +53,7 @@ function reduce(array, fn, initial) {
  Функция должна удалить указанное свойство из указанного объекта
  */
 function deleteProperty(obj, prop) {
+
 }
 
 /*
