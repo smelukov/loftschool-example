@@ -14,9 +14,12 @@ loaders.push({
 });
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        main: './src/index.js',
+        cookie: './src/cookie.js'
+    },
     output: {
-        filename: '[hash].js',
+        filename: '[name].[hash].js',
         path: path.resolve('dist')
     },
     devtool: 'source-map',
@@ -32,8 +35,15 @@ module.exports = {
         }),
         new ExtractTextPlugin('styles.css'),
         new HtmlPlugin({
-            title: 'Loft School sample project',
-            template: 'index.hbs'
+            title: 'Main Homework',
+            template: 'index.hbs',
+            chunks: ['main']
+        }),
+        new HtmlPlugin({
+            title: 'Div Drag And Drop',
+            template: 'cookie.hbs',
+            filename: 'cookie.html',
+            chunks: ['cookie']
         }),
         new CleanWebpackPlugin(['dist'])
     ]
