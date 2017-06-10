@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{htmlWebpackPlugin.options.title}}</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="modal">
+            <div class="modal__header">Выберите друзей</div>
+            <div class="modal__search">
+                <div class="modal__search-field">
+                    <input type="text" id="search-left" class="modal__search-input" placeholder="Начните вводить имя друга">
+                </div>
+                <div class="modal__search-field">
+                    <input type="text" id="search-right" class="modal__search-input" placeholder="Начните вводить имя друга">
+                </div>
+            </div>
+            <div class="friends">
+                <div class="friends__column">
+                    <div class="friends__title">Ваши друзья</div>
+                    <ul id="friends-left-list" class="friends__list"></ul>
+                </div>
+                <div class="friends__column droppable">
+                    <div class="friends__title">Друзья в списке</div>
+                    <ul id="friends-right-list" class="friends__list"></ul>
+                </div>
+            </div>
+            <div class="modal__footer">
+                <button id="button-save" class="modal__footer-btn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://vk.com/js/api/openapi.js" type="text/javascript"></script>
+</body>
+</html>
