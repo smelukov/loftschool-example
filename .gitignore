@@ -2,6 +2,7 @@
 .vscode/
 .DS_Store
 *.lock
+!yarn.lock
 *.log
 out/
 dist/
