@@ -1,0 +1,53 @@
+<style>
+    #homework-container {
+        font-family: Geneva, Arial, Helvetica, sans-serif;
+    }
+
+    #homework-container input {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin: 5px 0;
+    }
+
+    #homework-container table {
+        width: 100%;
+    }
+
+    #homework-container table td,
+    #homework-container table th {
+        padding: 5px;
+        text-align: left;
+    }
+
+    #homework-container tbody tr:nth-child(odd) {
+        background: #ddd;
+    }
+</style>
+
+<div id="filter-block">
+    Поиск cookie: <input type="text" id="filter-name-input" placeholder="имя cookie">
+</div>
+<hr>
+<div id="add-block">
+    Добавить cookie:<br>
+    <input type="text" id="add-name-input" placeholder="имя cookie"><br>
+    <input type="text" id="add-value-input" placeholder="значение cookie"><br>
+    <button id="add-button">добавить cookie</button>
+</div>
+<hr>
+<div id="list-block">
+    Доступные cookie:
+    <table id="list-table">
+        <thead>
+        <tr>
+            <th>имя</th>
+            <th>значение</th>
+            <th>удалить</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- tr добавлять сюда -->
+        </tbody>
+    </table>
+</div>
