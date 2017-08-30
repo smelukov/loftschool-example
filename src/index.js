@@ -60,7 +60,7 @@ function isSomeTrue(array, fn) {
  - fn не является функцией (с текстом "fn is not a function")
  */
 function returnBadArguments(fn, ...args) {
-    
+
     if (typeof(fn) !== 'function') throw 'fn is not a function';
 
     var errors = [];
@@ -90,7 +90,53 @@ function returnBadArguments(fn, ...args) {
  - number не является числом (с текстом "number is not a number")
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number = 0) {
+    if (typeof number !== 'number') throw 'number is not a number';
+
+    var calc = {
+        sum: function(...args) {
+            for (var i = 0, len = args.length; i < len; i++) {
+                if (typeof args[i] !== 'number') throw 'argument is not a number';
+
+                number += args[i];
+            }
+
+            return number;
+        },
+
+        dif: function(...args) {
+            for (var i = 0, len = args.length; i < len; i++) {
+                if (typeof args[i] !== 'number') throw 'argument is not a number';
+
+                number -= args[i];
+            }
+
+            return number;
+        },
+        
+        div: function(...args) {
+            for (var i = 0, len = args.length; i < len; i++) {
+                if (typeof args[i] !== 'number') throw 'argument is not a number';
+                if (args[i] === 0) throw 'division by 0';
+
+                number /= args[i];
+            }
+
+            return number;
+        },
+
+        mul: function(...args) {
+            for (var i = 0, len = args.length; i < len; i++) {
+                if (typeof args[i] !== 'number') throw 'argument is not a number';
+
+                number *= args[i];
+            }
+
+            return number;
+        },
+    }
+
+    return calc;
 }
 
 export {
