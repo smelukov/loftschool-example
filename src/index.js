@@ -11,31 +11,20 @@
  */
 function isAllTrue(array, fn) {
 
-    try {
-        if (!Array.isArray(array) || array.length < 1) throw 'empty array';
-        if(typeof(fn) !== 'function') throw 'fn is not a function';
+    if (!Array.isArray(array) || array.length < 1) throw 'empty array';
+    if (typeof(fn) !== 'function') throw 'fn is not a function';
 
-        var result = fn.call(null, array);
-
-        console.log(result);
-
-    } catch (e) {
-        return e;
-    }
-
-}
-
-function filter(arr) {
-    for (var i = 0, len = arr.length; i < len; i++) {
-        if (!arr[i]) {
+    for (var i = 0, len = array.length; i < len; i++) {
+        var y = fn(array[i]);
+        
+        if (y === false) {
             return false;
         }
     }
 
     return true;
-}
 
-console.log(isAllTrue(['1', '0', '2'], filter));
+}
 
 /*
  Задача 2:
@@ -47,6 +36,19 @@ console.log(isAllTrue(['1', '0', '2'], filter));
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
+
+    if (!(array instanceof Array) || array.length < 1) throw 'empty array';
+    if (typeof(fn) !== 'function') throw 'fn is not a function';
+
+    for (var i = 0, len = array.length; i < len; i++) {
+        var y = fn(array[i]);
+        
+        if (y) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*
@@ -57,7 +59,21 @@ function isSomeTrue(array, fn) {
  Необходимо выбрасывать исключение в случаях:
  - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
+function returnBadArguments(fn, ...args) {
+    
+    if (typeof(fn) !== 'function') throw 'fn is not a function';
+
+    var errors = [];
+
+    for (var i = 0, len = args.length; i < len; i++) {
+        try {
+            fn(args[i]);
+        } catch (e) {
+            errors.push(args[i]);
+        }
+    }
+
+    return errors;
 }
 
 /*
@@ -77,9 +93,9 @@ function returnBadArguments(fn) {
 function calculator() {
 }
 
-// export {
-//     isAllTrue,
-//     isSomeTrue,
-//     returnBadArguments,
-//     calculator
-// };
+export {
+    isAllTrue,
+    isSomeTrue,
+    returnBadArguments,
+    calculator
+};
