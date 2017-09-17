@@ -95,30 +95,31 @@ loadTowns().then((val) => {
         
     }
 }, (error) => {
-    console.log('Не удалось загрузить города');
+    homeworkContainer.innerHTML = 'Не удалось загрузить города';
+
+    let repeatButton = document.createElement('button');
+    repeatButton.innerHTML = 'Повторить попытку';
+    homeworkContainer.appendChild(repeatButton);
+
+    repeatButton.addEventListener('click', () => loadTowns());
 });
 
 filterInput.addEventListener('keyup', function() {
-    let matches = [],
-        input = filterInput.value;
+    let input = filterInput.value;
 
     filterResult.innerHTML = '';
 
     for (var i = 0; i < townsPromise.length; i++) {
         let item = townsPromise[i].name;
 
-        if (item !== '' && isMatching(item, input)) {
-            matches.push(item);
+        if (item !== '' && input !== '' && isMatching(item, input) ) {
+            let newLi = document.createElement('p');
+            
+            newLi.innerHTML = item;
+            filterResult.appendChild(newLi);
         }
     }
 
-    for (var j = 0; j < matches.length; j++) {
-        let newLi = document.createElement('p');
-        newLi.innerHTML = matches[j];
-
-        filterResult.appendChild(newLi);
-    }
-    
 });
 
 export {
