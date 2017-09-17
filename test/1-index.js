@@ -1,55 +1,85 @@
 import { assert } from 'chai';
-import { delayPromise, loadAndSortTowns } from '../src/index';
+import { createWindow, closeWindow, createCookie, deleteCookie } from '../src/index';
 
-describe('ДЗ 6.1 - Асинхронность и работа с сетью', () => {
-    describe('delayPromise', () => {
-        it('должна возвращать Promise', () => {
-            let result = delayPromise(1);
+function getCookies() {
+    return document.cookie
+        .split('; ')
+        .filter(Boolean)
+        .map(cookie => cookie.match(/^([^=]+)=(.+)/))
+        .reduce((obj, [, name, value]) => {
+            obj[name] = value;
 
-            // в FF + babel есть проблема при проверке instanceof Promise
-            // поэтому приходится проверять так
-            assert.equal(result.constructor.name, 'Promise');
+            return obj;
+        }, {});
+}
+
+describe('ДЗ 7.1 - BOM', () => {
+    describe('createWindow', () => {
+        let newWindow;
+
+        it('должна возвращать окно', () => {
+            newWindow = createWindow('test-window-1', 200, 100);
+            assert.equal(newWindow.constructor.name, 'Window');
         });
 
-        it('Promise должен быть resolved через указанное количество секунд', done => {
-            let result = delayPromise(1);
-            let startTime = new Date();
-
-            result.then(() => {
-                assert.isAtLeast(new Date() - startTime, 1000);
-                done();
-            }).catch(done);
+        after(() => {
+            if (newWindow && !newWindow.closed) {
+                newWindow.close();
+            }
         });
     });
 
-    describe('loadAndSortTowns', () => {
-        it('должна возвращать Promise', () => {
-            let result = loadAndSortTowns();
+    describe('closeWindow', () => {
+        let newWindow;
 
-            // в FF + babel есть проблема при проверке instanceof Promise
-            // поэтому приходится проверять так
-            assert.equal(result.constructor.name, 'Promise');
-            assert.typeOf(result.then, 'function');
-            assert.typeOf(result.catch, 'function');
+        it('должна закрывать окно', () => {
+            newWindow = createWindow('test-window-1', 200, 100);
+            closeWindow(newWindow);
+            assert.isTrue(newWindow.closed);
         });
 
-        it('Promise должен разрешаться массивом из городов', done => {
-            /* eslint-disable max-nested-callbacks */
-            let result = loadAndSortTowns();
+        after(() => {
+            if (newWindow && !newWindow.closed) {
+                newWindow.close();
+            }
+        });
+    });
 
-            result.then(towns => {
-                assert.isArray(towns, 'должен быть массивом');
-                assert.equal(towns.length, 50, 'неверный размер массива');
-                towns.forEach((town, i, towns) => {
-                    assert.isTrue(town.hasOwnProperty('name'), 'город должен иметь свойтво name');
+    describe('createCookie', () => {
+        before(() => {
+            document.cookie = `test-cookie-name=;expires=${new Date(0)}`
+        });
 
-                    if (i) {
-                        assert.isBelow(towns[i - 1].name, town.name, 'города должны быть отсортированы');
-                    }
-                });
-                done();
-            }).catch(done);
-            /* eslint-enable */
+        it('должна создавать cookie', () => {
+            let cookies;
+
+            createCookie('test-cookie-name', 'test-cookie-value');
+            cookies = getCookies();
+            assert.isTrue(cookies.hasOwnProperty('test-cookie-name'));
+            assert.equal(cookies['test-cookie-name'], 'test-cookie-value');
+        });
+
+        after(() => {
+            document.cookie = `test-cookie-name=;expires=${new Date(0)}`
+        });
+    });
+
+    describe('deleteCookie', () => {
+        before(() => {
+            document.cookie = `test-cookie-name=;expires=${new Date(0)}`
+        });
+
+        it('должна удалять cookie', () => {
+            let cookies;
+
+            createCookie('test-cookie-name', 'test-cookie-value');
+            deleteCookie('test-cookie-name');
+            cookies = getCookies();
+            assert.isFalse(cookies.hasOwnProperty('test-cookie-name'));
+        });
+
+        after(() => {
+            document.cookie = `test-cookie-name=;expires=${new Date(0)}`
         });
     });
 });
