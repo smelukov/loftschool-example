@@ -38,38 +38,49 @@ let addNameInput = homeworkContainer.querySelector('#add-name-input');
 let addValueInput = homeworkContainer.querySelector('#add-value-input');
 let addButton = homeworkContainer.querySelector('#add-button');
 let listTable = homeworkContainer.querySelector('#list-table tbody');
+let deleteButton = homeworkContainer.querySelector('.delete-button');
+
+function isMatching(full, chunk) {
+    return full.toLowerCase().includes(chunk.toLowerCase());
+}
 
 function listCookies() {
-    var theCookies = document.cookie.split(';');
 
-    var cookies = [];
+    if (document.cookie.length > 0) {
+        var theCookies = document.cookie.split(';');
+        var cookies = [];
 
-    for (var i = 0; i < theCookies.length; i++) {
-        var arr = theCookies[i].split('=');
-
-        cookies.push({ name: arr[0], value: arr[1] });
+        for (var i = 0; i < theCookies.length; i++) {
+            var arr = theCookies[i].split('=');
+    
+            cookies.push({ name: arr[0], value: arr[1] });
+        }
+    
+        return cookies;
     }
-
-    return cookies;
+    
 }   
 
 function renderCookies(cookies) {
-    for (let i = 0; i < cookies.length; i++) {
-        let tr = document.createElement('tr');
-        let tdName = document.createElement('td');
-        let tdValue = document.createElement('td');
-        let tdDelete = document.createElement('td');
-
-        tdName.innerHTML = cookies[i].name;
-        tdValue.innerHTML = cookies[i].value;
-        tdDelete.innerHTML = i;
-
-        tr.appendChild(tdName);
-        tr.appendChild(tdValue);
-        tr.appendChild(tdDelete);
-
-        listTable.appendChild(tr);
-        
+    listTable.innerHTML = '';
+    if (cookies) {
+        for (let i = 0; i < cookies.length; i++) {
+            let tr = document.createElement('tr');
+            let tdName = document.createElement('td');
+            let tdValue = document.createElement('td');
+            let tdDelete = document.createElement('td');
+    
+            tdName.innerHTML = cookies[i].name;
+            tdValue.innerHTML = cookies[i].value;
+            tdDelete.innerHTML = `<button class='delete-button' data-id = ${i}>Удалить</button>`;
+    
+            tr.appendChild(tdName);
+            tr.appendChild(tdValue);
+            tr.appendChild(tdDelete);
+    
+            listTable.appendChild(tr);
+            
+        }
     }
 }
 
@@ -83,12 +94,46 @@ function addCookie(name, value) {
     document.cookie = `${name}=${value};expires=${expires}`;
 }
 
-let cookies = listCookies();
+function deleteCookie(e) {
+    if (e.target.className === 'delete-button') {
+        let id = e.target.dataset.id;
+        let cookies = listCookies();
+        let cookie = cookies[id].name;
+        
+        document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 
-renderCookies(cookies);
+        renderCookies(listCookies());
+    }
+}
+
+if (listCookies() && listCookies().length > 0) {
+    renderCookies(listCookies());
+}
 
 filterNameInput.addEventListener('keyup', function() {
+    let value = filterNameInput.value;
+    let cookies = listCookies();
+    let result = [];
+
+    if(cookies) {
+
+        for (var i = 0; i < cookies.length; i++) {
+            if (isMatching(cookies[i].name, value) || isMatching(cookies[i].value, value)) {
+                result.push(cookies[i]);
+            }
+        }
+
+    }
+
+    if (result.length > 0) {
+        renderCookies(result)
+    } else {
+        renderCookies(result);
+    }
+    
 });
+
+document.addEventListener('click', deleteCookie);
 
 addButton.addEventListener('click', () => {
 
