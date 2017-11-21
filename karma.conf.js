@@ -1,3 +1,5 @@
+process.env.CHROME_BIN = require('puppeteer').executablePath()
+
 module.exports = function(config) {
     config.set({
         basePath: '',
@@ -18,7 +20,7 @@ module.exports = function(config) {
             fixWebpackSourcePaths: true
         },
         port: 9876,
-        browsers: ['Firefox'], // или Chrome
+        browsers: ['ChromeHeadless'], // или Chrome или Firefox
         captureTimeout: 20000,
         singleRun: true,
         plugins: [
