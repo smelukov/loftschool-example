@@ -10,22 +10,19 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isAllTrue(array, fn) {
-  try {
-    if ((Object.prototype.toString.call(array) != '[object Array]') || (array.length < 1)) { //(Object.prototype.toString.call([]) == '[object Array]')
-      throw new Error("empty array");
-    }
-    if (!(typeof fn === 'function')) {
-      throw new Error("fn is not a function");
-    }
-  } catch (e) {
-    console.error(e.message);
+  if ((Object.prototype.toString.call(array) != '[object Array]') || (array.length < 1)) {
+    throw new Error("empty array");
   }
+  if (typeof fn !== 'function') {
+    throw new Error("fn is not a function");
+  }
+  var a = true;
   for (let i = 0; i < array.length; i += 1) {
-    if (!fn(array[i])) {
-      return false;
+    if (fn(array[i]) !== true) {
+      a = false;
     }
   }
-  return true;
+  return a;
 }
 
 /*
@@ -38,16 +35,13 @@ function isAllTrue(array, fn) {
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
-  try {
-    if ((Object.prototype.toString.call(array) != '[object Array]') || (array.length < 1)) {
-      throw new Error("empty array");
-    }
-    if (!(typeof fn === 'function')) {
-      throw new Error("fn is not a function");
-    }
-  } catch (e) {
-    console.log(e.message);
+  if ((Object.prototype.toString.call(array) != '[object Array]') || (array.length < 1)) {
+    throw new Error('empty array');
   }
+  if (typeof fn !== 'function') {
+    throw new Error("fn is not a function");
+  }
+
   for (let i = 0; i < array.length; i += 1) {
     if (fn(array[i])) {
       return true;
@@ -64,18 +58,21 @@ function isSomeTrue(array, fn) {
  Необходимо выбрасывать исключение в случаях:
  - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
-  var arr = [];
-  arguments.forEach((elem)=>{
-    try {
-      if (!(typeof fn(elem) === 'function')) {
-        throw new Error("fn is not a function");
-      }
-    } catch (e) {
-      arr.push(elem);
-    }
-  });
-  return arr;
+function returnBadArguments(fn, ...arg) {
+if (typeof fn != 'function') {
+  throw new Error("fn is not a function");
+}
+
+var arr = [];
+for (var i = 0; i < arg.length; i += 1) {
+  try {
+    fn(arg[i]);
+  }
+  catch (e) {
+    arr.push(arg[i]);
+  }
+}
+return arr;
 }
 
 /*
@@ -92,7 +89,44 @@ function returnBadArguments(fn) {
  - number не является числом (с текстом "number is not a number")
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number = 0) {
+  if (typeof number !== 'number') {
+    throw new Error("number is not a number");
+  }
+  var calc = {
+    sum: function (...arg) {
+      var res = number;
+      for (let i = 0; i < arg.length; i += 1) {
+        res += arg[i];
+      }
+      return res;
+    },
+    dif: function (...arg) {
+      var res = number;
+      for (let i = 0; i < arg.length; i += 1) {
+        res -= arg[i];
+      }
+      return res;
+    },
+    div: function (...arg) {
+      var res = number;
+      for (let i = 0; i < arg.length; i += 1) {
+        if (arg[i] === 0) {
+          throw new Error("division by 0");
+        }
+        res /= arg[i];
+      }
+      return res;
+    },
+    mul: function (...arg) {
+      var res = number;
+      for (let i = 0; i < arg.length; i += 1) {
+        res *= arg[i];
+      }
+      return res;
+    }
+  };
+  return calc;
 }
 
 export {
