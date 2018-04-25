@@ -1,23 +1,21 @@
 let path = require('path');
-let loaders = require('./webpack.config.loaders')();
+let rules = require('./webpack.config.rules')();
 
-loaders.push({
+rules.push({
     test: /\.css$/,
-    loaders: ['style-loader', 'css-loader']
+    use: ['style-loader', 'css-loader']
 });
 
-loaders.push({
+rules.push({
     test: /\.js$/,
     include: path.resolve('src/'),
     loader: 'istanbul-instrumenter-loader',
-    query: {
+    options: {
         esModules: true
     }
 });
 
 module.exports = {
     devtool: 'inline-source-map',
-    module: {
-        loaders
-    }
+    module: { rules }
 };
