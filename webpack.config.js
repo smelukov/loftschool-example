@@ -7,9 +7,9 @@ let path = require('path');
 
 rules.push({
     test: /\.css$/,
-    loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: 'css-loader'
+    use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader'
     })
 });
 
@@ -25,7 +25,8 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
             compress: {
-                drop_debugger: false
+                drop_debugger: false,
+                warnings: false
             }
         }),
         new ExtractTextPlugin('styles.css'),
