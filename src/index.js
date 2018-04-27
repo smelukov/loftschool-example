@@ -12,8 +12,8 @@
 
  Другими словами: функция должна возвращать в неизменном виде то, что поступает ей на вход
  */
-function returnFirstArgument(name) {
-    return name;
+function returnFirstArgument(num) {
+    return num;
 }
 
 returnFirstArgument(100);
