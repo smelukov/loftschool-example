@@ -30,8 +30,8 @@ function returnFirstArgument(dimaTest) {
  Пример:
    sumWithDefaults(10) вернет 110
  */
-function sumWithDefaults(a, b) {
-    b = (typeof b !== 'undefined') ? b : 100;
+function sumWithDefaults(a, b = 100) {
+    // b = (typeof b !== 'undefined') ? b : 100;
     var result = a + b;
 
     return result;
@@ -62,11 +62,11 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 12
    console.log(f()); // выведет 13
  */
-function returnCounter(number) {
-    let innerNumber = (typeof number !== 'undefined') ? number : 0;
+function returnCounter(number = 0) {
+    // let innerNumber = (typeof number !== 'undefined') ? number : 0;
     
     return function () {
-        return ++innerNumber;
+        return ++number;
     };
 }
 
@@ -80,9 +80,9 @@ function returnCounter(number) {
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 function returnArgumentsArray() {
-    let arr = Array.prototype.slice.call(arguments);
+    // let arr = Array.prototype.slice.call(arguments);
 
-    return arr;
+    return [...arguments];
 }
 
 /*
@@ -101,15 +101,16 @@ function returnArgumentsArray() {
    console.log(newSum()) выведет 6
  */
 function bindFunction(fn) {
-    var arr = [];
+    // var arr = [];
 
-    for (let i = 1; i < arguments.length; i++) {
-        arr[i - 1] = arguments[i];
-    }
+    // for (let i = 1; i < arguments.length; i++) {
+    //     arr.push(arguments[i]);
+    // }
 
-    return function () {
-        return fn(...arr);
-    };
+    // return function () {
+    //     return fn(...arr);
+    // };
+    return fn.bind(...arguments);
 }
 
 export {
