@@ -71,11 +71,11 @@ function upperProps(obj) {
 function slice(array, from, to) {
     let newArray = [];
 
-    if (typeof from === 'undefined' || from === 'null') {
+    if (typeof from === 'undefined' || from === null) {
         from = 0;
     }
 
-    if (typeof to === 'undefined' || to === 'null') {
+    if (typeof to === 'undefined' || to === null) {
         to = array.length;
     }
     
