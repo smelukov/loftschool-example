@@ -36,6 +36,7 @@ function map(array, fn) {
  */
 function reduce(array, fn, initial) {
     let i = initial ? 0 : 1;
+
     initial = initial ? initial : array[0];
 
     for (; i < array.length; i++) {
@@ -89,6 +90,16 @@ function slice(array, from = 0, to = array.length) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        get(target, prop) {
+            return target[prop];
+        },
+        set(target, prop, value) {
+            target[prop] = Math.pow(value, 2);
+
+            return true;
+        }
+    });
 }
 
 export {
