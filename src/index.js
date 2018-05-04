@@ -97,7 +97,10 @@ function slice(array, from = 0, to = array.length) {
     if (end >= length) {
         end = length;
     } else if (end < 0) {
-        end = 0;
+        end = length - Math.abs(end);
+        if (Math.abs(end) > length) {
+            end = 0;
+        }
     }
 
     if (i < 0) {
