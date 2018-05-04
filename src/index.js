@@ -47,11 +47,15 @@ function map(array, fn = function (item, index, array) {
 function reduce(array, fn = function (result, item, index, array) {
     return result + item;
 }, initial = array[0]) {
-    let i;
+    let i = 0;
     let length = array.length;
     let result = initial;
 
-    for (i = 0; i < length; i++) {
+    if (initial === array[0]) {
+        i = 1;
+    }
+
+    for (i; i < length; i++) {
         result = fn(result, array[i], i, array);
     }
 
