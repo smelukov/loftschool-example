@@ -53,13 +53,14 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
-    let objKeysUpperCase = [];
+    // let objKeysUpperCase = [];
 
-    for (const key of Object.keys(obj)) {
-        objKeysUpperCase.push(key.toUpperCase());
-    }
+    // for (const key of Object.keys(obj)) {
+    //     objKeysUpperCase.push(key.toUpperCase());
+    // }
 
-    return objKeysUpperCase;
+    // return objKeysUpperCase;
+    return Object.keys(obj).map(key => key.toUpperCase());
 }
 
 /*
@@ -98,15 +99,23 @@ function slice(array, from = 0, to = array.length) {
  */
 function createProxy(obj) {
 
-    let proxy = new Proxy(obj, {
+    // let proxy = new Proxy(obj, {
+    //     set(obj, prop, value) {
+    //         obj[prop] = value * value;
+
+    //         return true;
+    //     }
+    // });
+
+    // return proxy;
+
+    return new Proxy(obj, {
         set(obj, prop, value) {
             obj[prop] = value * value;
 
             return true;
         }
     });
-
-    return proxy;
 }
 
 export {
