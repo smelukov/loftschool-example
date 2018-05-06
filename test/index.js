@@ -1,259 +1,177 @@
-const nativeSlice = Array.prototype.slice;
-const nativeMap = Array.prototype.map;
-const nativeReduce = Array.prototype.reduce;
-
 import { assert } from 'chai';
-import { randomValue as random, randomNumberArray } from '../helper';
-import {
-    forEach,
-    map,
-    reduce,
-    upperProps,
-    slice,
-    createProxy
-} from '../src/index';
+import { randomNumberArray, randomStringArray, randomValue as random } from '../helper';
+import { calculator, isAllTrue, isSomeTrue, returnBadArguments } from '../src/index';
 
-describe('ДЗ 3 - объекты и массивы', () => {
-    describe('forEach', () => {
-        it('должна вызывать функцию для каждого элемента массива и передавать элемент первым аргументом', () => {
-            let array = randomNumberArray();
-            let passed = [];
+describe('ДЗ 2 - работа с исключениями и отладчиком', () => {
+    describe('isAllTrue', () => {
+        it('должна вызывать fn для всех элементов массива', () => {
+            let array = random('array', 1);
+            let pass = [];
 
-            forEach(array, el => passed.push(el));
+            isAllTrue(array, e => pass.push(e));
 
-            assert.deepEqual(array, passed);
+            assert.deepEqual(pass, array);
         });
 
-        it('должна передавать индекс элемента вторым аргументом', () => {
+        it('должна вернуть true, если fn вернула true для всех элементов массива', () => {
             let array = randomNumberArray();
-            let index = 0;
+            let result = isAllTrue(array, Number.isFinite);
 
-            forEach(array, (el, i) => assert.equal(i, index++));
+            assert.isTrue(result);
         });
 
-        it('должна передавать сам массив третьим аргументом', () => {
+        it('должна вернуть false, если fn вернула false хотя бы для одного элемента массива', () => {
             let array = randomNumberArray();
 
-            forEach(array, (el, i, a) => assert.strictEqual(a, array));
+            array.push(random('string'));
+            let result = isAllTrue(array, Number.isFinite);
+
+            assert.isFalse(result);
+        });
+
+        it('должна выбросить исключение, если передан пустой массив', () => {
+            assert.throws(isAllTrue.bind(null, [], () => {
+            }), 'empty array');
+        });
+
+        it('должна выбросить исключение, если передан не массив', () => {
+            assert.throws(isAllTrue.bind(null,':(', () => {
+            }), 'empty array');
+            assert.throws(isAllTrue.bind(null, {}, () => {
+            }), 'empty array');
+        });
+
+        it('должна выбросить исключение, если fn не функция', () => {
+            let array = randomNumberArray();
+
+            assert.throws(isAllTrue.bind(null, array, ':('), 'fn is not a function');
         });
     });
 
-    describe('map', () => {
-        it('должна вызывать функцию для каждого элемента массива и передавать элемент первым аргументом', () => {
-            let array = randomNumberArray();
-            let passed = [];
+    describe('isSomeTrue', () => {
+        it('должна вернуть true, если fn вернула true хотя бы для одного элемента массива', () => {
+            let array = randomStringArray().concat(random('number'));
+            let result = isSomeTrue(array, Number.isFinite);
 
-            map(array, el => passed.push(el));
-
-            assert.deepEqual(array, passed);
+            assert.isTrue(result);
         });
 
-        it('должна передавать индекс элемента вторым аргументом', () => {
-            let array = randomNumberArray();
-            let index = 0;
+        it('должна вернуть false, если fn не вернула true хотя бы для одного элемента массива', () => {
+            let array = randomStringArray();
+            let result = isSomeTrue(array, Number.isFinite);
 
-            map(array, (el, i) => assert.equal(i, index++));
+            assert.isFalse(result);
         });
 
-        it('должна передавать сам массив третьим аргументом', () => {
-            let array = randomNumberArray();
-
-            map(array, (el, i, a) => assert.strictEqual(a, array));
+        it('должна выбросить исключение, если передан пустой массив', () => {
+            assert.throws(isSomeTrue.bind(null, [], () => {
+            }), 'empty array');
         });
 
-        it('должна возвращать измененную копию массива', () => {
-            let array = randomNumberArray();
-            let target = nativeMap.call(array, el => el ** 2);
-            let result = map(array, el => el ** 2);
-
-            assert.deepEqual(result, target);
+        it('должна выбросить исключение, если передан не массив', () => {
+            assert.throws(isSomeTrue.bind(null, ':(', () => {
+            }), 'empty array');
+            assert.throws(isSomeTrue.bind(null, {}), 'empty array');
         });
 
-        it('не должна изменять оригинальный массив', () => {
+        it('должна выбросить исключение, если fn не функция', () => {
             let array = randomNumberArray();
-            let arrayCopy = nativeSlice.call(array);
 
-            map(array, el => el ** 2);
-            assert.deepEqual(array, arrayCopy);
+            assert.throws(isSomeTrue.bind(null, array, ':('), 'fn is not a function');
         });
     });
 
-    describe('reduce', () => {
-        it('должна вызывать функцию для каждого элемента и передавать предыдущий результат первым аргументом', () => {
-            let array = randomNumberArray();
-            let i = 0;
-            let prevResult = array[0];
+    describe('returnBadArguments', () => {
+        it('должна вызывать fn для всех элементов массива', () => {
+            let array = random('array', 1);
+            let pass = [];
 
-            reduce(array, prev => {
-                assert.equal(prev, prevResult);
+            returnBadArguments(e => pass.push(e), ...array);
 
-                return prevResult = i++;
-            });
+            assert.deepEqual(pass, array);
         });
 
-        it('должна учитывать initial', () => {
-            let array = randomNumberArray();
-            let passed = [];
-            let initial = random('number');
+        it('должна вернуть массив с аргументами, для которых fn выбрасила исключение', () => {
+            let evenNumbers = randomNumberArray('even');
+            let oddNumbers = randomNumberArray('odd');
+            let fn = a => {
+                if (a % 2 != 0) {
+                    throw new Error('not even');
+                }
+            };
+            let result = returnBadArguments(fn, ...evenNumbers, ...oddNumbers);
 
-            reduce(array, prev => passed.push(prev), initial);
-            assert.deepEqual(passed[0], initial);
+            assert.deepEqual(result, oddNumbers);
         });
 
-        it('если initial не указан, то при первой итерации в prev передается первый элемент массива', () => {
-            let array = randomNumberArray();
-            let passed = [];
+        it('должна вернуть массив пустой массив, если не передано дополнительных аргументов', () => {
+            let fn = () => ':)';
+            let result = returnBadArguments(fn);
 
-            reduce(array, prev => passed.push(prev));
-            assert.strictEqual(passed[0], array[0]);
+            assert.deepEqual(result, []);
         });
 
-        it('должна передавать элемент вторым аргументом', () => {
-            let array = randomNumberArray();
-            let passed = [];
-            let initial = random('number');
-
-            reduce(array, (prev, el) => passed.push(el));
-            assert.deepEqual(array.slice(1), passed);
-
-            passed = [];
-            reduce(array, (prev, el) => passed.push(el), initial); // с учетом initial
-            assert.deepEqual(array, passed);
-        });
-
-        it('должна передавать индекс элемента третьим аргументом', () => {
-            let array = randomNumberArray();
-            let index = 1;
-            let initial = random('number');
-
-            reduce(array, (prev, el, i) => assert.equal(i, index++));
-
-            index = 0;
-            reduce(array, (prev, el, i) => assert.equal(i, index++), initial); // с учетом initial
-        });
-
-        it('должна передавать сам массив четвертым аргументом', () => {
-            let array = randomNumberArray();
-
-            reduce(array, (prev, el, i, a) => assert.strictEqual(a, array));
-        });
-
-        it('не должна изменять оригинальный массив', () => {
-            let array = randomNumberArray();
-            let arrayCopy = nativeSlice.call(array);
-
-            reduce(array, el => el ** 2);
-            assert.deepEqual(array, arrayCopy);
-        });
-
-        it('общая проверка работоспособности', () => {
-            let array = randomNumberArray();
-            let target = nativeReduce.call(array, (prev, el) => prev + el);
-            let result = reduce(array, (prev, el) => prev + el);
-            let initial = random('number');
-
-            assert.deepEqual(result, target);
-
-            target = nativeReduce.call(array, (prev, el) => prev + el, initial);
-            result = reduce(array, (prev, el) => prev + el, initial);
-            assert.deepEqual(result, target);
+        it('должна выбросить исключение, если fn не функция', () => {
+            assert.throws(returnBadArguments.bind(null, ':('), 'fn is not a function');
         });
     });
 
-    describe('upperProps', () => {
-        it('должна возвращать массив с именами свойств и преобразовывать эти имена в верхний регистр', () => {
-            let obj = { a: 1, b: 2 };
-            let target = ['A', 'B'];
-            let result = upperProps(obj);
+    describe('calculator', () => {
+        it('должна возвращать объект с методами', () => {
+            let calc = calculator();
 
-            assert.deepEqual(result, target);
+            assert.includeMembers(Object.keys(calc), ['sum', 'dif', 'div', 'mul']);
         });
-    });
 
-    describe('slice', () => {
-        it('общая проверка работоспособности', () => {
-            let array = [1, 2, 3, 4, 5, 6, 7];
-            let target = nativeSlice.call(array);
-            let result = slice(array);
+        it('метод sum должен складывать аргументы', () => {
+            let initialValue = random('number');
+            let calc = calculator(initialValue);
+            let args = randomNumberArray();
 
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0);
-            result = slice(array, 0);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, 0);
-            result = slice(array, 0, 0);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, 1);
-            result = slice(array, 0, 1);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, 2);
-            result = slice(array, 0, 2);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, 5);
-            result = slice(array, 0, 5);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, -1);
-            result = slice(array, 0, -1);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, -3);
-            result = slice(array, 0, -3);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 0, -10000);
-            result = slice(array, 0, -10000);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 3);
-            result = slice(array, 3);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 3, -100);
-            result = slice(array, 3, -100);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 3, 100);
-            result = slice(array, 3, 100);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 3, 5);
-            result = slice(array, 3, 5);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, 9999);
-            result = slice(array, 9999);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, -9999);
-            result = slice(array, -9999);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, -9999, 4);
-            result = slice(array, -9999, 4);
-            assert.deepEqual(result, target);
-
-            target = nativeSlice.call(array, -9999, -4);
-            result = slice(array, -9999, -4);
-            assert.deepEqual(result, target);
+            assert.strictEqual(calc.sum(...args), args.reduce((prev, current) => prev + current, initialValue));
         });
-    });
 
-    describe('createProxy', () => {
-        it('должна вернуть Proxy, который возводит в квадрат любое записываемое значение', () => {
-            let obj = {};
+        it('метод dif должен вычитать аргументы', () => {
+            let initialValue = random('number');
+            let calc = calculator(initialValue);
+            let args = randomNumberArray();
 
-            obj = createProxy(obj);
+            assert.strictEqual(calc.dif(...args), args.reduce((prev, current) => prev - current, initialValue));
+        });
 
-            obj.a = 2;
-            obj.b = 5;
+        it('метод div должен делить аргументы', () => {
+            let initialValue = random('number');
+            let calc = calculator(initialValue);
+            let args = randomNumberArray();
 
-            assert.deepEqual(obj, { a: 4, b: 25 });
+            assert.strictEqual(calc.div(...args), args.reduce((prev, current) => prev / current, initialValue));
+        });
+
+        it('метод div должен выбрасывать исключение, если хотя бы один из аргументов равен 0', () => {
+            let initialValue = random('number');
+            let calc = calculator(initialValue);
+            let args = [...randomNumberArray(), 0];
+
+            assert.throws(calc.div.bind(null, ...args), 'division by 0');
+        });
+
+        it('метод mul должен умножать аргументы', () => {
+            let initialValue = random('number');
+            let calc = calculator(initialValue);
+            let args = randomNumberArray();
+
+            assert.strictEqual(calc.mul(...args), args.reduce((prev, current) => prev * current, initialValue));
+        });
+
+        it('функция должна выбрасывать исключение, если number не является числом', () => {
+            assert.throws(calculator.bind(null, ':('), 'number is not a number');
+        });
+
+        it('значение по умолчанию для аргумента number должно быть равно 0', () => {
+            let calc = calculator();
+            let args = randomNumberArray();
+
+            assert.strictEqual(calc.sum(...args), args.reduce((prev, current) => prev + current));
         });
     });
 });
