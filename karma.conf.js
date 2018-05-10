@@ -20,9 +20,9 @@ module.exports = function(config) {
             fixWebpackSourcePaths: true
         },
         port: 9876,
-        browsers: ['ChromeHeadless'], // или Chrome или Firefox
+        browsers: ['ChromeHeadless'], // или Chrome или Firefox so browser can be used as debugger
         captureTimeout: 20000,
-        singleRun: true,
+        singleRun: true, // if false, browser can be used as debugger
         plugins: [
             require('karma-mocha'),
             require('karma-chai'),
