@@ -177,7 +177,7 @@ function collectDOMStat(root) {
 
         if (node.nodeType === 3) {
             rootStats.texts++;
-        } else {
+        } else if (node.nodeType === 1) {
             if (tag in rootStats.tags) {
                 rootStats.tags[tag]++;
             } else if (tag) {
