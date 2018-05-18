@@ -45,7 +45,17 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
+
 });
+
+let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
+    const [name, value] = current.split('=');
+
+    prev[name] = value;
+    
+    return prev;
+
+}, {});
 
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
@@ -53,14 +63,32 @@ addButton.addEventListener('click', () => {
     addNameInput.value = '';
     addValueInput.value = '';
 
-    let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
-        const [name, value] = current.split('=');
+    createRow();
+});
 
-        prev[name] = value;
-        console.log('​prev', prev);
-        
-        return prev;
+function createRow() {
+    let row = document.createElement('tr');
+    let name = document.createElement('td');
+    let value = document.createElement('td');
+    let buttonDel = document.createElement('button');
 
-    });
+    buttonDel.innerText = 'Delete';
+    buttonDel.classList.add('deleteButton');
+    name.id = 'name';
+    value.id = 'value';
+
+    row.appendChild(name);
+    row.appendChild(value);
+    row.appendChild(buttonDel);
+
+    console.log('​cookieObj', cookieObj);
+
+    listTable.appendChild(row);
+}
+
+const delButton = document.querySelectorAll('.deleteButton');
+
+delButton.addEventListener('click', (e) => {
     
+    listTable.removeChild
 });
