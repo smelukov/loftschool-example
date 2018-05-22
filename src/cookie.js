@@ -57,15 +57,16 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
 
 }, {});
 
+// Клики по кнопке добавить куки
 addButton.addEventListener('click', () => {
-    // здесь можно обработать нажатие на кнопку "добавить cookie"
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
     addNameInput.value = '';
     addValueInput.value = '';
 
-    createRow();
+    createRow(cookieObj);
 });
 
+// Добавление строки
 function createRow() {
     let row = document.createElement('tr');
     let name = document.createElement('td');
@@ -81,14 +82,17 @@ function createRow() {
     row.appendChild(value);
     row.appendChild(buttonDel);
 
-    console.log('​cookieObj', cookieObj);
+    for (let item in cookieObj) {
+        console.log('​createRow -> item', item);
+        name.innerHTML = item;
 
-    listTable.appendChild(row);
+        listTable.appendChild(row);
+    };
 }
 
+// удаление строки
 const delButton = document.querySelectorAll('.deleteButton');
 
-delButton.addEventListener('click', (e) => {
-    
-    listTable.removeChild
+delButton.addEventListener('click', (event) => {
+    event.terget.remove();
 });
