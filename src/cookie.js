@@ -78,16 +78,16 @@ function createRow() {
     name.id = 'name';
     value.id = 'value';
 
+    name.innerHtml = cookieObj;
+
     row.appendChild(name);
     row.appendChild(value);
     row.appendChild(buttonDel);
 
-    for (let item in cookieObj) {
-        console.log('​createRow -> item', item);
-        name.innerHTML = item;
-
+    for( let item in cookieObj) {
+        name.innerText = item;
         listTable.appendChild(row);
-    };
+    }
 }
 
 // удаление строки
