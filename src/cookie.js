@@ -48,6 +48,18 @@ filterNameInput.addEventListener('keyup', function() {
 
 });
 
+window.addEventListener('load', () => {
+    initialisation();
+});
+
+var initialisation = () => {
+    let obj = cookieObj();
+
+    for(let item in obj) {
+        createRow(item, obj[item]);
+    }
+};
+
 var cookieObj = () => {
     return document.cookie.split('; ').reduce((prev, current) => {
         const [name, value] = current.split('=');
@@ -86,7 +98,7 @@ var createRow = (name, value) => {
     trRow.appendChild(tdValue);
     trRow.appendChild(buttonDel);
 
-    return trRow;
+     return trRow;
 };
 
 console.log(createRow());
