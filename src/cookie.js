@@ -48,51 +48,57 @@ filterNameInput.addEventListener('keyup', function() {
 
 });
 
-let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
-    const [name, value] = current.split('=');
+var cookieObj = () => {
+    return document.cookie.split('; ').reduce((prev, current) => {
+        const [name, value] = current.split('=');
 
-    prev[name] = value;
-    
-    return prev;
+        prev[name] = value;
 
-}, {});
+        return prev;
+    }, {});
+};
+
+console.log(cookieObj());
 
 // Клики по кнопке добавить куки
 addButton.addEventListener('click', () => {
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-    addNameInput.value = '';
-    addValueInput.value = '';
 
-    createRow(cookieObj);
+    listTable.appendChild(createRow(addNameInput.value, addValueInput.value));
+
 });
 
-// Добавление строки
-function createRow() {
-    let row = document.createElement('tr');
-    let name = document.createElement('td');
-    let value = document.createElement('td');
+// Создание строки
+var createRow = (name, value) => {
+
+    let trRow = document.createElement('tr');
+    let tdName = document.createElement('td');
+    let tdValue = document.createElement('td');
     let buttonDel = document.createElement('button');
 
     buttonDel.innerText = 'Delete';
     buttonDel.classList.add('deleteButton');
-    name.id = 'name';
-    value.id = 'value';
+    tdName.innerText = name;
+    tdValue.innerText = value;
+    trRow.classList.add(`row-${name}`);
 
-    name.innerHtml = cookieObj;
+    trRow.appendChild(tdName);
+    trRow.appendChild(tdValue);
+    trRow.appendChild(buttonDel);
 
-    row.appendChild(name);
-    row.appendChild(value);
-    row.appendChild(buttonDel);
+    return trRow;
+};
 
-    for( let item in cookieObj) {
-        name.innerText = item;
-        listTable.appendChild(row);
-    }
-}
+console.log(createRow());
 
 // удаление строки
 const delButton = document.querySelectorAll('.deleteButton');
 
 delButton.addEventListener('click', (event) => {
-    event.terget.remove();
+    console.log(event.target);
+    // delRow(event.target.className);
 });
+
+var delRow = (name) => {
+    listTable.querySelector(`.row-${name}`).remove();
+};
