@@ -87,11 +87,6 @@ addButton.addEventListener('click', () => {
     let addNameInputValue = addNameInput.value;
     let addValueInputValue = addValueInput.value;
     let filterNameInputValue = filterNameInput.value;
-    let cookies = getCookiesObject();
-
-    if (addNameInputValue in cookies) {
-        deleteCookieInTable(addNameInputValue);
-    }
 
     document.cookie = `${addNameInputValue}=${addValueInputValue}`;
 
@@ -105,11 +100,12 @@ addButton.addEventListener('click', () => {
 
 listTable.addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON') {
-        deleteCookieInTable(e.target.dataset.cookie);
+        let parent = e.target.parentNode.parentNode;
+        let CName = parent.firstElementChild.innerText;
+
+        document.cookie = `${CName}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+        parent.remove();
+
     }
 });
 
-function deleteCookieInTable(cookie) {
-    document.cookie = `${cookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    listTable.querySelector(`.${cookie}`).remove();
-}
