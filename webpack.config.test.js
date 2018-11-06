@@ -1,21 +1,24 @@
-let path = require('path');
-let rules = require('./webpack.config.rules')();
-
-rules.push({
-    test: /\.css$/,
-    use: ['style-loader', 'css-loader']
-});
-
-rules.push({
-    test: /\.js$/,
-    include: path.resolve('src/'),
-    loader: 'istanbul-instrumenter-loader',
-    options: {
-        esModules: true
-    }
-});
+const path = require('path');
+const rules = require('./webpack.config.rules');
 
 module.exports = {
+    mode: 'development',
     devtool: 'inline-source-map',
-    module: { rules }
+    module: {
+        rules: [
+            ...rules,
+            {
+                test: /\.js$/,
+                enforce: 'post',
+                include: [path.resolve('src/')],
+                loader: 'istanbul-instrumenter-loader',
+                options: { esModules: true }
+            },
+            {
+                test: /\.css$/,
+                include: path.resolve('src/'),
+                use: ['style-loader', 'css-loader']
+            }
+        ]
+    }
 };
