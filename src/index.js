@@ -43,7 +43,7 @@ function sumWithDefaults(a, b = 100) {
    returnFnResult(() => 'привет') вернет 'привет'
  */
 function returnFnResult(fn) {
-  return (fn());
+  return fn();
 }
 
 /*
@@ -60,10 +60,10 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 13
  */
 function returnCounter(number = 0) 
-{ var a = number + 1; 
-return function F() { 
-	return a++;
-}
+{
+  return function F() {
+    return ++number;
+        }
 }
 
 /*
@@ -76,9 +76,8 @@ return function F() {
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 function returnArgumentsArray() {
-
- 
-}
+  
+  }
 
 /*
  Задание 6 *:
