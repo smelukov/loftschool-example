@@ -122,9 +122,7 @@ function sum(a, b) {
 var newSum = bindFunction(sum, 2, 4);
 
 function bindFunction(fn) {
-    return function() {
-        fn(...Array.from(arguments).slice(1, ...arguments.length));
-    }
+    return fn.bind(...arguments);
 }
 
 export {
