@@ -15,9 +15,6 @@
 function returnFirstArgument(a) {
     return a;
 } 
-
-returnFirstArgument(10);
-returnFirstArgument('привет');
 /*
  Задание 2:
 
@@ -32,11 +29,7 @@ returnFirstArgument('привет');
  Пример:
    sumWithDefaults(10) вернет 110
  */
-function sumWithDefaults(a, b) {
-    if (b === undefined) {
-        b = 100;
-    }
-
+function sumWithDefaults(a, b = 100) {
     return a + b;
 }
 
@@ -49,12 +42,8 @@ function sumWithDefaults(a, b) {
    returnFnResult(() => 'привет') вернет 'привет'
  */
 function returnFnResult(fn) {
-    let r = fn();
-
-    return r;
+    return fn();
 }
-
-returnFnResult(() => 'привет');
 
 /*
  Задание 4:
@@ -70,11 +59,7 @@ returnFnResult(() => 'привет');
    console.log(f()); // выведет 13
  */
 
-function returnCounter(number) {
-    if (number === undefined) {
-        number = 0;
-    }
-
+function returnCounter(number = 0) {
     // return () => ++number - альтернатива
     return function() {
         return ++number;
