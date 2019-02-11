@@ -62,6 +62,7 @@ function returnFnResult(fn) {
    console.log(f()); // выведет 13
  */
 function returnCounter(number) {
+  console.log("test")
 }
 
 /*
