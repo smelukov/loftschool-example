@@ -44,13 +44,21 @@ function map(array, fn) {
 
 function reduce(array, fn, initial) {
 
-  let itemFunc;
+  let prevVal,
+    i = 0;
 
-  for (var i = 0; i < array.length; i++) {
-    itemFunc = fn(initial ? initial : initial = array[0], array[i], i, array);
+  if (initial) {
+    prevVal = initial;
+  } else {
+    prevVal = array[0];
+    i++;
   }
 
-  return itemFunc;
+  for (i; i < array.length; i++) {
+    prevVal = fn(prevVal, array[i], i, array);
+  }
+
+  return prevVal;
 
 }
 
@@ -83,7 +91,33 @@ function upperProps(obj) {
  Напишите аналог встроенного метода slice для работы с массивами
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
-function slice(array, from, to) {}
+function slice(array, from, to) {
+
+  let returnSlice = [],
+    arrayLength,
+    i;
+
+  if (!to) {
+    arrayLength = array.length;
+  }
+  else if (to && from < to) {
+    arrayLength = array.length;
+    i = from;
+    returnSlice.push(array[i]);
+  }
+
+  for (i; i < arrayLength; i++) {
+    returnSlice.push(array[i]);
+  }
+
+  return returnSlice;
+
+}
+
+// console.log(slice([21, 52, 78, 42, 51], 1, 3));
+
+// var arrt = ["Почему", "надо", "учить", "JavaScript"];
+// console.log(arrt.slice(0, 2));
 
 /*
  Задание 6 *:
@@ -91,7 +125,7 @@ function slice(array, from, to) {}
  Функция принимает объект и должна вернуть Proxy для этого объекта
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
-function createProxy(obj) {}
+function createProxy(obj) { }
 
 export {
   forEach,
