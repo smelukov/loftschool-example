@@ -64,8 +64,6 @@ function returnCounter(number = 0) {
     return ++number;
   }
 }
-var f = returnCounter();
-
 
 /*
  Задание 5 *:
