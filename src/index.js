@@ -60,8 +60,7 @@ function isAllTrue(array, fn) {
  */
 function isSomeTrue(array, fn) {
 
-  let funcArgument = arguments[1];
-  let bool;
+  let result;
 
   if (!Array.isArray(array) || array.length == 0) {
     throw new Error('empty array');
@@ -71,16 +70,11 @@ function isSomeTrue(array, fn) {
 
   for (let i = 0; i < array.length; i++) {
 
-    if (funcArgument(array[i])) {
-      bool = true;
-    }
-    else {
-      bool = false;
-    }
+    result = fn(array[i]);
 
   }
 
-  return bool;
+  return result;
 
 }
 
