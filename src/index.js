@@ -36,8 +36,7 @@ function map(array, fn) {
  */
 function reduce(array, fn, initial) {
 
-    let previousValue = undefined;
-    let argsArr = [...array];
+    let previousValue;
     let i = 0;
 
     if (initial) {
@@ -47,8 +46,8 @@ function reduce(array, fn, initial) {
         i++;
     }
 
-    for (i; i < argsArr.length; i++) {
-        previousValue = fn(previousValue, argsArr[i], i, array);
+    for (i; i < array.length; i++) {
+        previousValue = fn(previousValue, array[i], i, array);
     }
 
     return previousValue;
@@ -81,15 +80,21 @@ function upperProps(obj) {
 function slice(array, from = 0, to = array.length) {
     
     let arr = [];
-    
+
+    if (from < 0) {
+        from = Math.max(array.length + from, 0);
+    } else {
+        from = Math.min(array.length, from);
+    }
+
     if (to < 0) {
-        to += array.length;
+        to = Math.max(array.length + to, 0);
+    } else {
+        to = Math.min(array.length, to);
     }
 
     for (let i = from; i < to; i++) {
-        if (array[i] !== undefined) {
-            arr.push(array[i]);
-        }
+        arr.push(array[i]);
     }
 
     return arr;
