@@ -7,6 +7,9 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
  */
 function forEach(array, fn) {
+    for (var i = 0; i < array.length; i++) {
+        fn(array[i], i, array);
+    }
 }
 
 /*
@@ -16,6 +19,14 @@ function forEach(array, fn) {
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn) {
+    var Newarray = [];
+
+    for (var i = 0; i < array.length; i++) {
+
+        Newarray[i] = fn(array[i], i, array);
+    }
+
+    return Newarray;
 }
 
 /*
@@ -25,6 +36,14 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
+    var x = initial || array[0],
+        i = initial ? 0 : 1;
+
+    for (; i < array.length; i++) {
+        x = fn(x, array[i], i, array);
+    }
+
+    return x;
 }
 
 /*
@@ -36,6 +55,9 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
+    var arr = Object.keys(obj);
+
+    return arr.map(item => item.toUpperCase());
 }
 
 /*
@@ -44,7 +66,20 @@ function upperProps(obj) {
  Напишите аналог встроенного метода slice для работы с массивами
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
-function slice(array, from, to) {
+
+function slice(array, from = 0, to = array.length) {
+    let arrayNew = [];
+
+    from = from < 0 ? array.length - Math.abs(from) : from;
+    from = from < 0 && Math.abs(from) > array.length ? 0 : from;
+    to = to < 0 ? array.length - Math.abs(to) : to;
+    to = to > array.length ? array.length : to;
+
+    for (let i = from; i < to; i++) {
+        arrayNew.push(array[i]);
+    }
+
+    return arrayNew;
 }
 
 /*
@@ -54,6 +89,16 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        get(target, prop) {
+            return target[prop];
+        },
+        set(target, prop, value) {
+            target[prop] = value * value;
+
+            return true;
+        }
+    })
 }
 
 export {
