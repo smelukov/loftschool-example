@@ -96,7 +96,7 @@ function returnBadArguments(fn) {
       result.push(arguments[i]);
     }
   }
-  
+
   return result;
 }
 
@@ -117,15 +117,37 @@ function returnBadArguments(fn) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-// function calculator() {
-// }
+function calculator(number = 0) {
+  if (!isFinite(number)) {
+    throw new Error('number is not a number');
+  }
+  
+  return {
+    sum: function (...args) {
+      return args.reduce((prevRes, curr) => prevRes + curr, number)
+    },
+    dif: function (...args) {
+      return args.reduce((prevRes, curr) => prevRes - curr, number)
+    },
+    div: function (...args) {
+      return args.reduce((prevRes, curr) => {
+        if (curr === 0) {
+          throw new Error('division by 0');
+        }
 
+        return prevRes / curr;
+      }, number)
+    },
+    mul: function (...args) {
+      return args.reduce((prevRes, curr) => prevRes * curr, number)
+    }
+  }
+}
 /* При решении задач, пострайтесь использовать отладчик */
 
 export {
   isAllTrue,
   isSomeTrue,
-  returnBadArguments
-  // ,
-  // calculator
+  returnBadArguments,
+  calculator
 };
