@@ -156,6 +156,48 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
+    let texts = 0;
+    let tags = {};
+    let classes = {};
+
+    function stats(element) {
+        let tag, classList;
+
+        for (let child of element.childNodes) {
+
+            if (child.nodeType === 1) {
+                tag = child.tagName;
+                classList = child.classList;
+
+                if (tags[tag]) {
+                    tags[tag] = ++tags[tag]
+                } else {
+                    tags[tag] = 1;
+                }
+                if (classList) {
+                    for (let item of classList) {
+                        if (classes[item]) {
+                            classes[item] = ++classes[item];
+                        } else {
+                            classes[item] = 1;
+                        }
+                    }
+                }
+                stats(child);
+
+            } else if (child.nodeType === 3) {
+                texts++;
+            }
+        }
+    }
+
+    stats(root);
+
+    return {
+        tags,
+        classes,
+        texts
+    }
 }
 
 /*
@@ -191,6 +233,28 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+    let add;
+
+    let observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            add = Array.from(mutation.addedNodes);
+
+            if (add.length > 0) {
+                fn({
+                    type: 'insert',
+                    nodes: add
+                })
+            } else {
+                fn({
+                    type: 'remove',
+                    nodes: Array.from(mutation.removedNodes)
+                })
+            }
+        });
+    });
+    let config = { childList: true, subtree: true };
+
+    observer.observe(where, config);
 }
 
 export {
