@@ -64,7 +64,6 @@ function addListeners(target) {
     let deltaX, deltaY;
 
     target.addEventListener('mousedown', function(e) {
-        
         e.target.classList.add('clicked');
         moveElement = true;
         deltaX = e.clientX - e.target.offsetLeft;
@@ -73,11 +72,11 @@ function addListeners(target) {
 
     target.addEventListener('mouseup', function(e) {
         e.target.classList.remove('clicked');
+        e.target.style.zIndex = '-1';
         moveElement = false;
-        
     });
 
-    target.addEventListener('mousemove', function(e) {
+    document.addEventListener('mousemove', function(e) {
         if (moveElement) {
             e.target.style.top = `${e.clientY - deltaY}px`;
             e.target.style.left = `${e.clientX - deltaX}px`;
