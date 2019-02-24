@@ -27,28 +27,24 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
-    const div = document.createElement('div');
+    let div = document.createElement('div');
 
-    function getRandomSize(square) {
-        return Math.floor(Math.random() * square + 80) + 'px';
+    function getRandomPixels(square) {
+        return Math.floor(Math.random() * square + 50) + 'px';
     }
 
     function getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
+        let color = '#' + Math.random().toString(16).substr(-6);
         
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-
         return color;
     }
 
     div.classList.add('draggable-div');
-    div.style.width = getRandomSize(600);
-    div.style.height = getRandomSize(600);
-    div.style.top = getRandomSize(300);
-    div.style.left = getRandomSize(300);
+    div.style.width = getRandomPixels(400);
+    div.style.height = getRandomPixels(400);
+    div.style.top = getRandomPixels(1000);
+    div.style.left = getRandomPixels(1000);
+    div.style.position = 'absolute'; 
     div.style['background-color'] = getRandomColor();
 
     return div;
@@ -68,6 +64,7 @@ function addListeners(target) {
     let deltaX, deltaY;
 
     target.addEventListener('mousedown', function(e) {
+        
         e.target.classList.add('clicked');
         moveElement = true;
         deltaX = e.clientX - e.target.offsetLeft;
@@ -76,7 +73,8 @@ function addListeners(target) {
 
     target.addEventListener('mouseup', function(e) {
         e.target.classList.remove('clicked');
-        moveElement = false
+        moveElement = false;
+        
     });
 
     target.addEventListener('mousemove', function(e) {
