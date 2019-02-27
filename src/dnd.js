@@ -52,26 +52,46 @@ function addListeners(target) {
 
   target.classList.add("draggable-div");
 
-  target.addEventListener("dragover", target);
-  target.addEventListener("dragenter", target);
-  target.addEventListener("drop", target);
+  target.addEventListener('mousedown', e => {
+    // currentDrag = div;
+    target.style.position = 'absolute';
+    
+    moveAt(e);
+
+    function moveAt(e) {
+      target.style.left = e.pageX - target.offsetWidth / 2 + 'px';
+      target.style.top = e.pageY - target.offsetHeight / 2 + 'px';
+    }
+
+    document.onmousemove = function(e) {
+      moveAt(e);
+    }
+
+  });
+
+  target.addEventListener("mouseup", e => {
+    document.onmousemove = null;
+    target.onmouseup = null;
+  });
 
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
-addDivButton.addEventListener('click', function() {
-    // создать новый div
-    const div = createDiv();
+addDivButton.addEventListener('click', function () {
+  // создать новый div
+  const div = createDiv();
 
-    // добавить на страницу
-    homeworkContainer.appendChild(div);
-    // назначить обработчики событий мыши для реализации D&D
-    addListeners(div);
-    // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
-    // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
+  // добавить на страницу
+  homeworkContainer.appendChild(div);
+  // назначить обработчики событий мыши для реализации D&D
+  addListeners(div);
+  // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
+  // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
+
+
 });
 
 export {
-    createDiv
+  createDiv
 };
