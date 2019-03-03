@@ -94,8 +94,6 @@ function loadTowns() {
 
 }
 
-loadTowns();
-
 let newFn = loadTowns();
 
 /*
