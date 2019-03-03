@@ -121,9 +121,7 @@ filterInput.addEventListener('keyup', () => {
     
     filterResult.innerHTML = '';
 
-    if (value === '') {
-        filterResult.innerHTML = '';        
-    } else {
+    if (value !== '') {
         towns.forEach(town => {
             if (isMatching(town.name, value)) {
                 const li = document.createElement('li');
