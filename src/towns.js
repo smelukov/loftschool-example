@@ -111,6 +111,7 @@ retryButton.addEventListener('click', () => {
     filterBlock.style.display = 'none';
     loadingBlock.style.display = 'block';
     loadingBlock.innerHTML = 'Загрузка...';
+    retryButton.style.display = 'none';
 
     getTowns();
 });
