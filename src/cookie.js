@@ -73,8 +73,8 @@ function updateTable() {
     listTable.innerHTML = '';
     for (let cookie in cookies) {
         if (!filterNameInput.value 
-          || ~cookie.indexOf(filterNameInput.value)
-          || ~cookies[cookie].indexOf(filterNameInput.value)) {
+          || cookie.includes(filterNameInput.value)
+          || cookies[cookie].includes(filterNameInput.value)) {
 
             let row = listTable.insertRow(-1);
             let deleteButton = document.createElement('button');
