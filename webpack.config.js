@@ -51,7 +51,8 @@ module.exports = {
     path: path.resolve('dist')
   },
   devServer: {
-    port: 5050
+    port: 5050,
+    index: "cookie.html"
   },
   mode: 'development',
   devtool: 'source-map',
