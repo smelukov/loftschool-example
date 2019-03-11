@@ -61,11 +61,11 @@ const cookieFilter = {
   }
 }
 const cookieManipulations = {
-  addCookie: function (name, value, days) {
-    if (name != '' && value != '') {
+  addCookie: function (cookieName, cookieValue, days) {
+    if (cookieName != '' && cookieValue != '') {
       var expireDate = new Date;
       expireDate.setTime(expireDate.getTime() + 24 * 60 * 60 * 1000 * days);
-      document.cookie = `${name}=${value};expires=${expireDate.toGMTString()};`;
+      document.cookie = `${cookieName}=${cookieValue};expires=${expireDate.toGMTString()};`;
     }
   },
   getCookies: function (cookie) {
@@ -76,7 +76,7 @@ const cookieManipulations = {
       return prev;
     }, {});
   },
-  deleteCookie: function(name) {
+  deleteCookie: function (name) {
     this.addCookie(name, null, -1);
   }
 }
@@ -87,27 +87,30 @@ function renderTableRow(cookie) {
   cookieFilter.clearTable();
 
   for (let i = 0; i < cookiesKeys.length; i++) {
-    let elemTr = document.createElement('tr');
-    let deleteTrButton = document.createElement('button');
-    let elemTd = document.createElement('td');
-    let elemTd2 = document.createElement('td');
-    let elemTd3 = document.createElement('td');
     let cookieName = cookiesKeys[i];
+    if (cookieName.includes(filterNameInput.value) ||
+      cookie[cookieName].includes(filterNameInput.value)) {
+      let elemTr = document.createElement('tr');
+      let deleteTrButton = document.createElement('button');
+      let elemTd = document.createElement('td');
+      let elemTd2 = document.createElement('td');
+      let elemTd3 = document.createElement('td');
 
-    deleteTrButton.textContent = 'Удалить';
-    deleteTrButton.addEventListener('click', function () {
-      cookieManipulations.deleteCookie(cookieName);
-      elemTr.remove();
-    });
+      deleteTrButton.textContent = 'Удалить';
+      deleteTrButton.addEventListener('click', function () {
+        cookieManipulations.deleteCookie(cookieName);
+        elemTr.remove();
+      });
 
-    elemTd.textContent = cookieName;
-    elemTd2.textContent = cookie[cookieName];
-    elemTd3.append(deleteTrButton);
-    elemTr.append(elemTd);
-    elemTr.append(elemTd2);
-    elemTr.append(elemTd3);
+      elemTd.textContent = cookieName;
+      elemTd2.textContent = cookie[cookieName];
+      elemTd3.append(deleteTrButton);
+      elemTr.append(elemTd);
+      elemTr.append(elemTd2);
+      elemTr.append(elemTd3);
 
-    listTable.append(elemTr);
+      listTable.append(elemTr);
+    }
   }
 
 }
@@ -120,15 +123,14 @@ filterNameInput.addEventListener('keyup', function () {
   let obj = {};
 
   for (let i = 0; i < cookiesKeys.length; i++) {
-    if (cookieFilter.isMatching(cookiesKeys[i], filterValue)) {
-      let value = cookies[cookiesKeys[i]];
+    let value = cookies[cookiesKeys[i]];
+    if (cookieFilter.isMatching(cookiesKeys[i], filterValue) || cookieFilter.isMatching(value, filterValue)) {
       obj[cookiesKeys[i]] = value;
     }
   }
 
   cookieFilter.clearTable();
   renderTableRow(obj);
-
 });
 
 addButton.addEventListener('click', () => {
@@ -139,9 +141,8 @@ addButton.addEventListener('click', () => {
   cookieManipulations.addCookie(inputName, inputValue, 365);
 
   let cookies = cookieManipulations.getCookies(document.cookie);
-  
-  renderTableRow(cookies);
 
+  renderTableRow(cookies);
 });
 
 window.addEventListener('load', () => {
