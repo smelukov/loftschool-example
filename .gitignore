@@ -8,3 +8,5 @@ out/
 dist/
 node_modules/
 coverage/
+dz_done/
+loftschool-example/
