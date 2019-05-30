@@ -27,7 +27,7 @@ function returnFirstArgument(a) {
 
  2.1 *: Значение по умолчанию для второго аргумента должно быть равно 100
 
- Пример:
+   Пример:
    sumWithDefaults(10) вернет 110
  */
 function sumWithDefaults(a, b) {
