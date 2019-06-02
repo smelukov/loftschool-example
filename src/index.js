@@ -87,30 +87,25 @@ function upperProps(obj) {
 function slice(array, from, to) {
     var begin, end;
     var result = [];
+    var length = array.length;
 
-    if (from === undefined) {
+    if (from === undefined || from + length < 0) {
         begin = 0;
     } else if (from < 0) {
-        begin = array.length + from;
+        begin = length + from;
     } else {
         begin = from;
     }
 
-    if (to === undefined) {
-        end = array.length;
+    if (to === undefined || to > length) {
+        end = length;
     } else if (to < 0) {
-        end = array.length + to;
+        end = length + to;
     } else {
         end = to;
     }
 
-    if (end > array.length) {
-        end = array.length;
-    }
-    if (begin < 0) {
-        begin = 0;
-    }
-    if (begin > array.length || end < 0) {
+    if (begin > length || end < 0) {
         return result;
     }
 
