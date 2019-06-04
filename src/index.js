@@ -12,11 +12,12 @@
  */
 function createDivWithText(text) {
     var elem = document.createElement('div');
+
     elem.innerText = text;
 
     return elem;
 }
-//console.log(createDivWithText('loftschool'));
+
 /*
  Задание 2:
 
@@ -28,8 +29,6 @@ function createDivWithText(text) {
 function prepend(what, where) {
     where.prepend(what);
 }
-
-//prepend(document.querySelector('#two'), document.querySelector('#one')) ;
 
 /*
  Задание 3:
@@ -51,11 +50,9 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-    //console.log(where.children);
 
     return [...where.children].filter(item => item.nextElementSibling && item.nextElementSibling.matches('p'));
 }
-console.log(findAllPSiblings(document.body));
 /*
  Задание 4:
 
@@ -82,7 +79,7 @@ function findError(where) {
 
     return result;
 }
-//console.log(findError(document.body));
+
 /*
  Задание 5:
 
@@ -97,12 +94,11 @@ function findError(where) {
  */
 function deleteTextNodes(where) {
     [... where.childNodes].forEach(element => {
-        if(element.nodeType !== 1) {
+        if (element.nodeType !== 1) {
             where.removeChild(element)
         }
     });
 }
-//deleteTextNodes(document.body);
 
 /*
  Задание 6:
@@ -117,15 +113,13 @@ function deleteTextNodes(where) {
  */
 function deleteTextNodesRecursive(where) {
     [... where.childNodes].forEach(element => {
-        if(element.nodeType !== 1) {
+        if (element.nodeType !== 1) {
             where.removeChild(element)
-        }
-        else {
+        } else {
             deleteTextNodesRecursive(element);
         }
     });
 }
-//deleteTextNodesRecursive(document.body);
 /*
  Задание 7 *:
 
@@ -153,28 +147,29 @@ function collectDOMStat(root) {
 
     function checkElement (root) {
         [... root.childNodes].forEach(element => {
-            if(element.nodeType === 3) {
+            if (element.nodeType === 3) {
                 texts++;
-            };
+            } else if (element.classList.length > 0) {
+                element.classList.forEach(item => {
+                    classes[item] = ((classes[item]) ? classes[item]+1 : 1);    
+                });
+            }
 
             if (element.tagName !== undefined ) {
-                if(tags[element.tagName]) {
-                    tags[element.tagName]++;
-                }
-                else {
-                    tags[element.tagName] = 1;
-                }
+                tags[element.tagName] = (tags[element.tagName] ? tags[element.tagName]+1 : 1);    
             }
-            console.log(element.classList);
-            if(element.childNodes.length > 0) {
+            
+            if (element.childNodes.length > 0) {
                 checkElement(element);
             }
         });
-        return {texts, tags};
+
+        return { texts, tags, classes };
     }
+
     return checkElement(root);
 }
-console.log(collectDOMStat(document.body));
+
 /*
  Задание 8 *:
 
@@ -207,16 +202,42 @@ console.log(collectDOMStat(document.body));
      nodes: [div]
    }
  */
+
 function observeChildNodes(where, fn) {
+
+    const observer = new MutationObserver (function(mutations) {
+
+        mutations.forEach(mutation => {
+            if (mutation.removedNodes.length > 0 && mutation.removedNodes[0].nodeType !==3) {
+                var removed = [];
+
+                mutation.removedNodes.forEach((elem) => {
+                    removed.push(elem);
+                })
+                fn({ 'type': 'remove', 'nodes': removed });
+            }
+            if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].nodeType !== 3) {
+                var added = [];
+
+                mutation.addedNodes.forEach((elem) => {
+                    added.push(elem);
+                });
+                fn({ 'type': 'insert', 'nodes': added });
+            }
+        });
+    });
+    const config = { subtree: true, childList: true };
+
+    observer.observe(where, config);   
 }
 
-// export {
-//     createDivWithText,
-//     prepend,
-//     findAllPSiblings,
-//     findError,
-//     deleteTextNodes,
-//     deleteTextNodesRecursive,
-//     collectDOMStat,
-//     observeChildNodes
-// };
+export {
+    createDivWithText,
+    prepend,
+    findAllPSiblings,
+    findError,
+    deleteTextNodes,
+    deleteTextNodesRecursive,
+    collectDOMStat,
+    observeChildNodes
+};
