@@ -23,11 +23,12 @@
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.1",
-    "mini-css-extract-plugin": "^0.4.4",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^2.0.0",
     "handlebars": "^4.0.12",
     "handlebars-loader": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.4",
     "style-loader": "^0.23.1",
     "webpack": "^4.25.1",
     "webpack-dev-server": "^3.1.10"
