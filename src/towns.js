@@ -48,37 +48,35 @@ function loadTowns() {
 
     req.onload = function() {
         if (req.status !== 200) {
-            throw new Error('Ошибка загрузки списка городов');
+            reject(new Error('1 Ошибка загрузки списка городов'));
         };
 
-        let result = JSON.parse(req.response);
+        try {
+            var result = JSON.parse(req.response);
+            result.sort(function (a, b) {
+                return (a.name > b.name) ? 1 : -1;
+              });
+            resolve(result);
+        } catch (error) {
+            reject(new Error('7 Ошибка парсинга списка городов'));
+        }
 
-        result.sort(function (a, b) {
-            return (a.name > b.name) ? 1 : -1;
-          });
-        resolve(result);
     };
 
     req.onerror = function (error) {
-        const button = document.createElement('button');
-
-        loadingBlock.innerText = "Не удалось загрузить города";
-        button.innerText = "Повторить";
-        button.onclick = loadTowns;
-        loadingBlock.appendChild(button);
-
         if (!error.message) {
-            error.message = 'Ошибка загрузки списка городов'
+            error.message = '3 Ошибка загрузки списка городов'
         }
-        throw error;
         reject(error);
 
     }
-    try {
-        req.send();
-    } catch (error) {
-        throw error;
-    }
+    req.send();
+    // try {
+    //     req.send();
+    // } catch (error) {
+    //     console.log('111');
+    //     throw error;
+    // }
     
   })
 }
@@ -122,12 +120,18 @@ townsListLoaded.then(
         townsList = result;
     },
     error => {
-        console.log("sdsdf"+error.message);
         throw error;
     }
 )
 .catch(e => {
-    console.log(e.message);
+    console.log("4 " + e.message);
+    const button = document.createElement('button');
+
+    loadingBlock.innerText = "Не удалось загрузить города";
+    button.innerText = "Повторить";
+    button.onclick = loadTowns;
+    loadingBlock.appendChild(button);
+
 });
     
 
