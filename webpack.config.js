@@ -16,10 +16,10 @@ rules.push({
 module.exports = {
     entry: {
         main: './src/index.js',
-        dnd: './src/dnd.js'
+        dnd: './src/towns.js'
     },
     devServer: {
-        index: 'dnd.html'
+        index: './dist/towns.html'
     },
     output: {
         filename: '[name].[hash].js',
@@ -28,25 +28,25 @@ module.exports = {
     devtool: 'source-map',
     module: { rules },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true,
-            compress: {
-                drop_debugger: false,
-                warnings: false
-            }
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     sourceMap: true,
+        //     compress: {
+        //         drop_debugger: false,
+        //         warnings: false
+        //     }
+        // }),
         new ExtractTextPlugin('styles.css'),
+        // new HtmlPlugin({
+        //     title: 'Main Homework',
+        //     template: 'main.hbs',
+        //     chunks: ['index']
+        // }),
         new HtmlPlugin({
-            title: 'Main Homework',
-            template: 'main.hbs',
-            chunks: ['main']
+            title: 'towns',
+            template: 'src/towns.hbs',
+            //filename: 'towns.html',
+            chunks: ['towns']
         }),
-        new HtmlPlugin({
-            title: 'Div Drag And Drop',
-            template: 'dnd.hbs',
-            filename: 'dnd.html',
-            chunks: ['dnd']
-        }),
-        new CleanWebpackPlugin(['dist'])
+        //new CleanWebpackPlugin(['dist'])
     ]
 };

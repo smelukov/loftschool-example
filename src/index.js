@@ -16,6 +16,11 @@ function delayPromise(seconds) {
   });
 }
 
+// var promise = delayPromise(3);
+// promise.then( function(result) {
+//   console.log ("jr");
+// })
+
 /*
  Задание 2:
 
@@ -30,23 +35,20 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
-  let req = new XMLHttpRequest();
 
   return new Promise (function(resolve, reject) {
-    var req = new XMLHttpRequest();
+    let req = new XMLHttpRequest();
+
     req.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json', true);
 
     req.onload = function() {
       var result = JSON.parse(req.response);
       result.sort(function (a, b) {
-        if (a.name > b.name) {
-          return 1
-        } else {
-          return -1
-        }
+        return (a.name > b.name) ? 1 : -1;
       });
       resolve(result);
     };
+
     req.send();
   })
 }
