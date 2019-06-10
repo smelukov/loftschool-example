@@ -50,3 +50,60 @@ filterNameInput.addEventListener('keyup', function() {
 addButton.addEventListener('click', () => {
     // здесь можно обработать нажатие на кнопку "добавить cookie"
 });
+
+function addCookie (name, value, path, expires) {
+  expires = expires.toUTCString();
+  document.cookie = `${name}=${value}; path=${path}; expires=${expires}`;
+}
+function deleteCookie (name, path) {
+  var date = new Date(0);
+  date = date.toUTCString();
+  document.cookie = `${name}=; path=${path}; expires=${date}`; 
+}
+function getCookies () {
+  let cookiesStr, cookies = [];
+  cookiesStr = (document.cookie).split("; ");
+
+  cookiesStr.forEach(cookie => {  
+    const [name, value] = cookie.split("=");
+    cookies[name] = value;
+  });
+
+  return cookies;
+};
+
+addCookie('kkk', '09', '/', new Date(2020,0,1));
+addCookie('ll', '09', '/', new Date(2020,0,1));
+addCookie('mmm', '09', '/', new Date(2020,0,1));
+
+let cookiesArr = getCookies();
+
+for (let key in cookiesArr) {
+  var tr = document.createElement('tr');
+  var tdName = document.createElement('td');
+  var tdValue = document.createElement('td');
+  var tdAction = document.createElement('td');
+  var btn = document.createElement('button');
+
+  btn.addEventListener('click', function(e) {
+    let name = key;
+
+    deleteCookie (name, '/');
+    e.target.parentElement.parentElement.parentElement.removeChild(e.target.parentElement.parentElement);
+  });
+  tdName.innerText = key;
+  tdValue.innerText = cookiesArr[key];
+  tdAction.append(btn);
+  btn.innerText = 'удалить'; 
+  tr.append(tdName, tdValue, tdAction);
+  listTable.appendChild(tr);
+}
+
+  
+
+
+console.log (typeof cookiesArr);
+console.log (cookiesArr.length);
+cookiesArr.forEach(function (element) {
+  console.log(element);
+});

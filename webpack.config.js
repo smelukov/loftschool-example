@@ -4,6 +4,25 @@ let CleanWebpackPlugin = require('clean-webpack-plugin');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let rules = require('./webpack.config.rules');
 let path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+// module.exports = {
+//   optimization: {
+//     minimizer: [
+//       // we specify a custom UglifyJsPlugin here to get source maps in production
+//       new UglifyJsPlugin({
+//         cache: true,
+//         parallel: true,
+//         uglifyOptions: {
+//           compress: false,
+//           ecma: 6,
+//           mangle: true
+//         },
+//         sourceMap: true
+//       })
+//     ]
+//   }
+// };
 
 rules.push({
     test: /\.css$/,
@@ -15,11 +34,11 @@ rules.push({
 
 module.exports = {
     entry: {
-        main: './src/index.js',
-        dnd: './src/towns.js'
+        //index: './src/index.js',
+        cookie: './src/cookie.js'
     },
     devServer: {
-        index: './dist/towns.html'
+        index: 'cookie.html'
     },
     output: {
         filename: '[name].[hash].js',
@@ -38,15 +57,31 @@ module.exports = {
         new ExtractTextPlugin('styles.css'),
         // new HtmlPlugin({
         //     title: 'Main Homework',
-        //     template: 'main.hbs',
+        //     template: 'index.hbs',
         //     chunks: ['index']
         // }),
         new HtmlPlugin({
-            title: 'towns',
-            template: 'src/towns.hbs',
-            //filename: 'towns.html',
-            chunks: ['towns']
+            title: 'cookies',
+            template: './src/cookie.hbs',
+            filename: 'cookie.html',
+            chunks: ['cookie']
         }),
-        //new CleanWebpackPlugin(['dist'])
-    ]
+        new CleanWebpackPlugin(['dist'])
+    ],
+
+    optimization: {
+        minimizer: [
+        // we specify a custom UglifyJsPlugin here to get source maps in production
+        new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            uglifyOptions: {
+            compress: false,
+            ecma: 6,
+            mangle: true
+            },
+            sourceMap: true
+        })
+        ]
+    }
 };
