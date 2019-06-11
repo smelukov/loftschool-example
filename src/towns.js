@@ -29,7 +29,6 @@
    homeworkContainer.appendChild(newDiv);
  */
 
-
 const homeworkContainer = document.querySelector('#homework-container');
 
 /*
@@ -40,45 +39,63 @@ const homeworkContainer = document.querySelector('#homework-container');
  */
 
 function loadTowns() {
-
-  return new Promise (function(resolve, reject) {
-    let req = new XMLHttpRequest();
-
-    req.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json', true);
-
-    req.onload = function() {
-        if (req.status !== 200) {
-            reject(new Error('1 Ошибка загрузки списка городов'));
-        };
-
-        try {
-            var result = JSON.parse(req.response);
+    return fetch ('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+        .then(function(response) {
+            if (response.status < 200 && response.status >= 300) {
+                return Promise.reject(new Error('reponse.statusText'));
+            }
+            
+            return Promise.resolve(response)
+            
+        })
+        .then(function(response) {
+            return Promise.resolve(response.json())
+        })
+        .then(function(result) {
             result.sort(function (a, b) {
+
                 return (a.name > b.name) ? 1 : -1;
-              });
-            resolve(result);
-        } catch (error) {
-            reject(new Error('7 Ошибка парсинга списка городов'));
-        }
+            });
 
-    };
+            return Promise.resolve(result);
+        })
+        .catch(function (error) {
 
-    req.onerror = function (error) {
-        if (!error.message) {
-            error.message = '3 Ошибка загрузки списка городов'
-        }
-        reject(error);
-
-    }
-    req.send();
-    // try {
-    //     req.send();
-    // } catch (error) {
-    //     console.log('111');
-    //     throw error;
-    // }
+            return Promise.reject(error);
+        });
     
-  })
+    //   return new Promise (function(resolve, reject) {
+    //     let req = new XMLHttpRequest();
+
+    //     req.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json', true);
+
+    //     req.onload = function() {
+    //         if (req.status !== 200) {
+    //             reject(new Error('1 Ошибка загрузки списка городов'));
+    //         };
+
+    //         try {
+    //             var result = JSON.parse(req.response);
+    //             result.sort(function (a, b) {
+    //                 return (a.name > b.name) ? 1 : -1;
+    //               });
+    //             resolve(result);
+    //         } catch (error) {
+    //             reject(new Error('7 Ошибка парсинга списка городов'));
+    //         }
+
+    //     };
+
+    //     req.onerror = function (error) {
+    //         if (!error.message) {
+    //             error.message = '3 Ошибка загрузки списка городов'
+    //         }
+    //         reject(error);
+
+    //     }
+    //     req.send();
+    //   })
+
 }
 
 /*
@@ -94,11 +111,13 @@ function loadTowns() {
  */
 
 function isMatching(full, chunk) {
-    if (chunk === '') return false;
+    if (chunk === '') {
+        return false;
+    }
 
     var re = new RegExp(chunk, 'i');
 
-    return  (full.search(re) != -1) ? true : false;   
+    return (full.search(re) != -1) ? true : false;   
 }
 
 /* Блок с надписью "Загрузка" */
@@ -113,28 +132,25 @@ const filterResult = homeworkContainer.querySelector('#filter-result');
 let townsListLoaded = loadTowns();
 let townsList = [];
 
-townsListLoaded.then(
-    result => {
-        loadingBlock.style.display = "none";
-        filterBlock.style.display = "block";
-        townsList = result;
-    },
-    error => {
-        throw error;
-    }
-)
-.catch(e => {
-    console.log("4 " + e.message);
-    const button = document.createElement('button');
+townsListLoaded
+    .then(
+        result => {
+            loadingBlock.style.display = 'none';
+            filterBlock.style.display = 'block';
+            townsList = result;
+        },
+        error => {
+            throw error;
+        })
+    .catch(() => {
+        const button = document.createElement('button');
 
-    loadingBlock.innerText = "Не удалось загрузить города";
-    button.innerText = "Повторить";
-    button.onclick = loadTowns;
-    loadingBlock.appendChild(button);
+        loadingBlock.innerText = 'Не удалось загрузить города';
+        button.innerText = 'Повторить';
+        button.onclick = loadTowns;
+        loadingBlock.appendChild(button);
 
-});
-    
-
+    });
 
 filterInput.addEventListener('keyup', function(e) {
     let filteredTownsArr = [];
@@ -143,14 +159,18 @@ filterInput.addEventListener('keyup', function(e) {
         return isMatching(item.name, e.target.value)
     });
     if (filteredTownsArr.length > 0) {
-        filterResult.innerText = "";
+        filterResult.innerText = '';
+        let docFrag = document.createDocumentFragment();
+
         filteredTownsArr.forEach(function(item) {
             const div = document.createElement('div');
+
             div.innerText = item.name;
-            filterResult.appendChild(div);
+            docFrag.appendChild(div);
         });
+        filterResult.appendChild(docFrag);
     } else {
-        filterResult.innerText = "не найдено городов";
+        filterResult.innerText = 'не найдено городов';
     }
 
 });
