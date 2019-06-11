@@ -182,6 +182,7 @@ describe('ДЗ 7.2 - Cookie editor', () => {
 
                 filterNameInput.value = 'value-2';
                 filterNameInput.dispatchEvent(new KeyboardEvent('keyup'));
+
                 assert.equal(listTable.children.length, 1);
 
                 addNameInput.value = 'test-cookie-name-3';
