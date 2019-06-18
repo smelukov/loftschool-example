@@ -15,14 +15,14 @@ rules.push({
 
 module.exports = {
     entry: {
-        main: './src/index.js',
-        dnd: './src/towns.js'
+        index: './src/index.js',
+        towns: './src/towns.js'
     },
     devServer: {
-        index: './dist/towns.html'
+        index: './dist/index.html'
     },
     output: {
-        filename: '[name].[hash].js',
+        filename: '[name].js',
         path: path.resolve('dist')
     },
     devtool: 'source-map',

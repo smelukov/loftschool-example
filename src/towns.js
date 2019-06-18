@@ -10,7 +10,7 @@
  Во время загрузки городов, на странице должна быть надпись "Загрузка..."
  После окончания загрузки городов, надпись исчезает и появляется текстовое поле.
 
- Разметку смотрите в файле towns-content.hbs
+ Разметку смотрите в файле towns-content.hbs 
 
  Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
 
@@ -39,30 +39,52 @@ const homeworkContainer = document.querySelector('#homework-container');
  */
 
 function loadTowns() {
-    return fetch ('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-        .then(function(response) {
-            if (response.status < 200 && response.status >= 300) {
-                return Promise.reject(new Error('reponse.statusText'));
-            }
-            
-            return Promise.resolve(response)
-            
-        })
-        .then(function(response) {
-            return Promise.resolve(response.json())
-        })
-        .then(function(result) {
-            result.sort(function (a, b) {
 
+    return fetch ('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+        .then(response => {
+            if (response.status === 200) {
+
+            return response.json()
+            }
+        })
+        .then(result => {
+            result.sort(function (a, b) {
+    
                 return (a.name > b.name) ? 1 : -1;
             });
-
-            return Promise.resolve(result);
+    
+            return result;
         })
-        .catch(function (error) {
-
-            return Promise.reject(error);
+        .catch(error => {
+            //throw new Error(error);
+            throw error;
         });
+
+            
+    // return fetch ('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+    //     .then(function(response) {
+    //         if (response.status < 200 && response.status >= 300) {
+    //             return Promise.reject(new Error('reponse.statusText'));
+    //         }
+            
+    //         return Promise.resolve(response)
+            
+    //     })
+    //     .then(function(response) {
+    //         return Promise.resolve(response.json())
+    //     })
+    //     .then(function(result) {
+    //         result.sort(function (a, b) {
+
+    //             return (a.name > b.name) ? 1 : -1;
+    //         });
+
+    //         return Promise.resolve(result);
+    //     })
+    //     .catch(function (error) {
+
+    //         return Promise.reject(error);
+    //     });
     
     //   return new Promise (function(resolve, reject) {
     //     let req = new XMLHttpRequest();
@@ -175,7 +197,7 @@ filterInput.addEventListener('keyup', function(e) {
 
 });
 
-export {
-    loadTowns,
-    isMatching
-};
+// export {
+//     loadTowns,
+//     isMatching
+// };
