@@ -1,0 +1,1 @@
+console.log(arguments[0]);
