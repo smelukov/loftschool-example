@@ -103,7 +103,7 @@ function returnArgumentsArray() {
 
 
 function bindFunction(fn, ...args) {
-    return fn.bind(context, ...args)
+    return fn.bind(null, ...args)
 }
 
 export {
