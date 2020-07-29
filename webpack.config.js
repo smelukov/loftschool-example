@@ -8,9 +8,11 @@ const root = path.resolve('projects');
 const projects = fs.readdirSync(root);
 const entries = {};
 const htmlPlugins = [];
+const proxy = {};
 
 for (const project of projects) {
-  entries[project] = path.join(root, project);
+  const projectPath = path.join(root, project);
+  entries[project] = projectPath;
   htmlPlugins.push(
     new HtmlPlugin({
       title: project,
@@ -19,6 +21,13 @@ for (const project of projects) {
       chunks: [project],
     })
   );
+
+  const settingsPath = path.join(projectPath, 'settings.json');
+
+  if (fs.existsSync(settingsPath)) {
+    const settings = require(settingsPath);
+    Object.assign(proxy, settings.proxy);
+  }
 }
 
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
@@ -30,7 +39,9 @@ module.exports = {
     path: path.resolve('dist'),
   },
   mode,
-  devtool: 'source-map',
+  devServer: {
+    proxy,
+  },
   module: {
     rules: [
       {
