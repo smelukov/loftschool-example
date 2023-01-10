@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-undef
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2021,
     sourceType: 'module',
   },
   plugins: ['prettier', 'jest'],

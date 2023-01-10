@@ -1,8 +1,7 @@
-const HtmlPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin;
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const fs = require('fs');
 const path = require('path');
+const HtmlPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const root = path.resolve('projects');
 const projects = fs.readdirSync(root);
@@ -12,6 +11,10 @@ const proxy = {};
 
 for (const project of projects) {
   const projectPath = path.join(root, project);
+
+  if (!fs.statSync(projectPath).isDirectory()) {
+    continue;
+  }
 
   entries[project] = projectPath;
   htmlPlugins.push(
@@ -36,6 +39,7 @@ const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development
 module.exports = {
   entry: entries,
   output: {
+    clean: true,
     filename: mode === 'production' ? 'name/[chunkhash].js' : '[name]/[name].js',
     path: path.resolve('dist'),
   },
@@ -52,8 +56,7 @@ module.exports = {
         options: { cacheDirectory: true },
       },
       {
-        test: /\.html/,
-        include: [path.resolve(__dirname, 'projects')],
+        test: /projects\/.+\.html/,
         use: [
           { loader: './scripts/html-inject-loader.js' },
           {
@@ -63,11 +66,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg|eot|ttf|woff|woff2)$/i,
-        loader: 'file-loader',
-        options: {
-          name: '[hash:8].[ext]',
-          outputPath: 'reosurces',
-        },
+        type: 'asset/resource',
       },
       {
         test: /\.css$/,
@@ -80,6 +79,5 @@ module.exports = {
       filename: '[name].css',
     }),
     ...htmlPlugins,
-    new CleanWebpackPlugin(),
   ],
 };
