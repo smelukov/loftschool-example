@@ -38,7 +38,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.spec.ts', '**/*.spec.js'],
+      files: ['**/*.spec.[jt]s', '**/*.spec.[jt]s'],
       plugins: ['jest'],
       env: {
         'jest/globals': true,
@@ -47,6 +47,22 @@ module.exports = {
         jest: true,
         nsObj: false,
       },
+    },
+    {
+      parser: '@typescript-eslint/parser',
+      files: ['*.ts'],
+      rules: {
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'error',
+        'no-case-declarations': 'off',
+      },
+      extends: [
+        'eslint:recommended',
+        'plugin:prettier/recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      plugins: ['prettier', '@typescript-eslint'],
     },
   ],
 };

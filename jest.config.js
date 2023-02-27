@@ -3,7 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['./scripts/setup.js'],
   roots: ['<rootDir>/projects'],
   transform: {
-    '^.+\\.js$': 'babel-jest',
+    '^.+\\.[tj]s$': 'babel-jest',
     '^.+\\.html$': './scripts/jest-html-transformer.js',
   },
 };

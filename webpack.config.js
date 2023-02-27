@@ -11,6 +11,8 @@ const proxy = {};
 
 for (const project of projects) {
   const projectPath = path.join(root, project);
+  const globalHTML = path.resolve('./layout.html');
+  const projectHTML = path.join(projectPath, 'layout.html');
 
   if (!fs.statSync(projectPath).isDirectory()) {
     continue;
@@ -20,7 +22,7 @@ for (const project of projects) {
   htmlPlugins.push(
     new HtmlPlugin({
       title: project,
-      template: path.resolve('./layout.html'),
+      template: fs.existsSync(projectHTML) ? projectHTML : globalHTML,
       filename: `${project}/index.html`,
       chunks: [project],
     })
@@ -47,22 +49,20 @@ module.exports = {
   devServer: {
     proxy,
   },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.[jt]s$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: { cacheDirectory: true },
       },
       {
-        test: /projects\/.+\.html/,
-        use: [
-          { loader: './scripts/html-inject-loader.js' },
-          {
-            loader: 'raw-loader',
-          },
-        ],
+        test: /projects\/.+\.html$/,
+        use: [{ loader: './scripts/html-inject-loader.js' }, { loader: 'html-loader' }],
       },
       {
         test: /\.(jpe?g|png|gif|svg|eot|ttf|woff|woff2)$/i,
@@ -71,6 +71,18 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.html\.hbs$/,
+        use: [
+          { loader: './scripts/html-to-dom-loader.js' },
+          { loader: 'handlebars-loader' },
+        ],
+      },
+      {
+        test: /\.hbs$/,
+        exclude: /\.html\.hbs$/,
+        use: 'handlebars-loader',
       },
     ],
   },
