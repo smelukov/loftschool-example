@@ -1,0 +1,348 @@
+/* base */
+
+body {
+    font-family: "Roboto Light", Geneva, Arial, Helvetica, sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* app */
+
+#app {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.page {
+    height: 100%;
+    width: 360px;
+    position: relative;
+}
+
+/* page login */
+
+.page-login {
+    display: flex;
+    justify-content: center;
+    background: #1C1B1F;
+}
+
+.page-login-button {
+    border: none;
+    background: url('images/button.svg');
+    width: 219px;
+    height: 40px;
+    position: absolute;
+    bottom: 60px;
+    margin: 0 auto;
+}
+
+.page-login-logo {
+    top: 429px;
+    position: absolute;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-login-image {
+    width: 147px;
+    height: 24px;
+    background: url('images/logo.svg');
+}
+
+.page-login-text {
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    width: 237px;
+    color: #B0B0B0;
+}
+
+.page-login-vert1, .page-login-vert2, .page-login-vert3 {
+    width: 71px;
+    height: 333px;
+    position: absolute;
+}
+
+.page-login-vert1 {
+    top: 59px;
+    left: 49px;
+    background: linear-gradient(180deg, rgba(28, 27, 31, 0) 80%, #1C1B1F 100%), url('images/vert1.svg');
+}
+
+.page-login-vert2 {
+    top: 81px;
+    left: 144px;
+    background: linear-gradient(180deg, rgba(28, 27, 31, 0) 80%, #1C1B1F 100%), url('images/vert2.svg');
+}
+
+.page-login-vert3 {
+    top: 59px;
+    left: 239px;
+    background: linear-gradient(180deg, rgba(28, 27, 31, 0) 80%, #1C1B1F 100%), url('images/vert3.svg');
+}
+
+/* page main */
+
+.page-main .component-header {
+    position: absolute;
+    display: flex;
+    height: 80px;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0 0 0 / 25%);
+    padding: 0 24px;
+}
+
+.page-main .component-header-profile-link {
+    display: flex;
+    align-items: center;
+}
+
+.page-main .component-header-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.page-main .component-header-name {
+    margin-left: 8px;
+    font-weight: 400;
+    font-size: 16px;
+    color: white;
+}
+
+.page-main .component-footer {
+    position: absolute;
+    display: flex;
+    height: 80px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0 0 0 / 25%);
+    padding: 0 24px;
+}
+
+.page-main .component-footer-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.page-main .component-footer-container-profile-link {
+    margin-left: auto;
+}
+
+.page-main .component-footer-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.page-main .component-footer-container-social-comments,
+.page-main .component-footer-container-social-likes {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.page-main .component-footer-container-social-comments:before,
+.page-main .component-footer-container-social-likes:before {
+    display: inline-block;
+    content: '';
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+}
+
+.page-main .component-footer-container-social-comments:before {
+    background: url("images/chat.svg");
+}
+
+.page-main .component-footer-container-social-likes:before {
+    background: url("images/heart.svg");
+    margin-left: 18px;
+}
+
+.page-main .component-footer-container-social-likes.liked:before {
+    background: url("images/heart-red.svg");
+    margin-left: 18px;
+}
+
+.page-main .component-photo {
+    height: 100%;
+    width: 360px;
+    position: relative;
+
+    background-size: cover;
+    background-position: center;
+}
+
+.component-comments {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.component-comments-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 50vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    border-radius: 28px 28px 0 0;
+    background: white;
+}
+
+.component-comments-container-title {
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+}
+
+.component-comments-container-list {
+    margin-top: 24px;
+    flex-grow: 1;
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    overflow-y: auto;
+    margin-bottom: 14px
+}
+
+.component-comments-container-form {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 48px;
+}
+
+.component-comments-container-form-input {
+    box-sizing: border-box;
+    border: 1px solid #E0E0E0;
+    border-radius: 32px;
+    flex-grow: 1;
+    height: 48px;
+}
+
+.component-comments-container-form-input,
+.component-comments-container-form-input,
+.component-comments-container-form-input,
+.component-comments-container-form-input {
+    padding: 14px 16px;
+}
+
+.component-comments-container-form-send {
+    background: url('images/send.svg');
+    width: 40px;
+    height: 40px;
+}
+
+.component-comment {
+    display: flex;
+    gap: 8px
+}
+
+.component-comment-photo {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+}
+
+.component-comment-content {
+    flex-direction: column;
+}
+
+.component-comment-name {
+    font-size: 12px;
+}
+
+.component-comment-text {
+    font-size: 14px;
+}
+
+/* page profile */
+
+.page-profile {
+    margin-top: 52px;
+}
+
+.page-profile-back {
+    background: url('images/arrow-left.svg');
+    width: 24px;
+    height: 24px;
+
+    position: absolute;
+    left: 24px;
+}
+
+.page-profile-exit {
+    background: url('images/exit.svg');
+    width: 24px;
+    height: 24px;
+
+    position: absolute;
+    right: 24px;
+}
+
+.component-user-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 24px 16px 16px 16px;
+}
+
+.component-user-photo {
+    width: 104px;
+    height: 104px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.page-profile .component-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-profile .component-user-info-photo {
+    height: 72px;
+    width: 72px;
+    border-radius: 50%;
+
+    background-size: cover;
+    background-position: center;
+}
+
+.page-profile .component-user-info-name {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 26px;
+    margin-top: 8px;
+}
